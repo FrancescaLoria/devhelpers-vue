@@ -1,10 +1,12 @@
 <script>
 import axios from 'axios';
+import {store} from "../store" 
 export default {
     name: 'developerCard',
     data() {
         return {
-            developers: []
+            developers: [],
+            store
         }
     },
     mounted () {
@@ -12,7 +14,7 @@ export default {
     },
     methods: {
         getDeveloper() {
-            axios.get("http://localhost:8000/api/developers").then((resp) => {
+            axios.get(`${this.store.apiUrl}/api/developers`).then((resp) => {
                 console.log(resp);
                 this.developers = resp.data.results
             })
@@ -29,6 +31,9 @@ export default {
   <div class="card-body">
     <h5 class="card-title">{{ developer.name }}</h5>
     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <ul v-for="item in developer.technologies">
+        <li>{{ item.name }}</li>
+    </ul>
     <a href="#" class="btn btn-primary">Go somewhere</a>
   </div>
 </div>
