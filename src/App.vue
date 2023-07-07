@@ -1,9 +1,10 @@
 
 <script>
-import Header from './components/Header.vue';
+import Header from './components/Header/Header.vue';
+
 export default {
   components: {
-    Header,
+    Header
   }
 }
 
@@ -11,7 +12,8 @@ export default {
 
 <template>
   <Header />
-  <h2>HELLO VITA DE MERD</h2>
+ 
+  
 </template>
 
 
