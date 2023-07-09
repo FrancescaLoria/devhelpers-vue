@@ -1,19 +1,26 @@
 <script>
+import DevelopersCard from '../components/DevelopersCard.vue';
 export default {
     name: "AdvancedSearch",
-    data(){
-        return{
+    data() {
 
+        return {
+            developers: []
         }
+    },
+    components: {
+        DevelopersCard,
     }
 }
 </script>
 
 <template>
     <h1>hello</h1>
-    <router-link :to="{name: singleDev[0].routeName, params:{name:DeveloperName}}">{{ singleDev[0].label }}</router-link>
+    <div class="card-container" v-for="developer in developers">
+        <router-link :to="{ name: 'developerDetails', params: { id: developer.id } }">
+            <DevelopersCard />
+        </router-link>
+    </div>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
