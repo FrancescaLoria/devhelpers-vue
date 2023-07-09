@@ -15,12 +15,20 @@ export default {
 </script>
 
 <template>
-    <h1>hello</h1>
-    <div class="card-container" v-for="developer in developers">
-        <router-link :to="{ name: 'developerDetails', params: { id: developer.id } }">
-            <DevelopersCard />
-        </router-link>
+    <div class="container">
+        <h1 class="title text-center my-4 fw-bold">I nostri programmatori</h1>
+        <div class="row">
+            <div class="col" v-for="x in 20">
+                <DevelopersCard />
+            </div>
+        </div>
     </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@use "../styles/partials/variables" as *;
+
+.title {
+    color: $dark-green;
+}
+</style>
