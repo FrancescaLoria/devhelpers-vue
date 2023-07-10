@@ -23,7 +23,7 @@ export default {
                 <li>{{ item.name }}</li>
             </ul>
             <button type="button" class="btn">
-                <a href="#" class="card-link">Details</a>
+                <router-link :to="{ name: 'developerDetails' }" class=" card-link">Details</router-link>
             </button>
 
 

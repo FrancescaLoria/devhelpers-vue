@@ -10,7 +10,7 @@ export default {
 </script>
 
 <template>
-    <h1>Developer Detail page</h1>
+    <h1>Ciao siamo ai dettagli</h1>
 </template>
 
 <style lang="scss" scoped></style>
