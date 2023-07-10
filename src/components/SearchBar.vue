@@ -1,12 +1,13 @@
 <script>
 import axios from 'axios';
 import { store } from "../store";
-import { isProxy, toRaw } from 'vue';
 import DeveloperCard from "./DeveloperCard.vue";
+import Filters from './Filters.vue';
 export default {
   name: "SearchBar",
   components: {
-    DeveloperCard
+    DeveloperCard,
+    Filters
   },
   data() {
     return {
@@ -15,7 +16,9 @@ export default {
       developers: [],
       developerSelected: [],
       ids: [],
-      idsString: ""
+      idsString: "",
+      developerVote:[],
+      filteredDeveloper:[]
       // paramsToString: ""
     };
   },
@@ -28,14 +31,7 @@ export default {
         this.technologies = resp.data.results;
       });
     },
-    getParams(param) {
-      if (this.params.includes(param)) {
-        const index = this.params.indexOf(param);
-        this.params.slice(index, 1);
-      } else {
-        this.params.push(param);
-      }
-    },
+
     getDeveloper(id) {
 
       if (this.ids.includes(id)) {
@@ -53,17 +49,28 @@ export default {
         console.log("Resp.data.results", resp);
         this.developers = (resp.data.results);
       })
+    },
+    getFilterVote(vote){
+      axios.get(`${this.store.apiUrl}/api/reviews/` + vote)
+      .then((resp)=>{
+          console.log(resp);
+          this.developersVote = resp.data.results
+      })
+    },
+
+    developerFilter(){
+
     }
   },
 };
 </script>
 
 <template>
-  <div v-for="technology in technologies">
+  <div v-for="technology,index in technologies" :key="index">
     <input @change="getDeveloper(technology.id)" id="technology" type="checkbox" :value="technology.id" />
     <label for="technologies">{{ technology.name }}</label>
   </div>
-
+  <Filters @filterVote ="getFilterVote(selectedVote)"/>
   <!-- <div v-for="developer in developers">
     <DeveloperCard :developer="developer" />
   </div> -->
@@ -71,7 +78,7 @@ export default {
   <div class="container">
     <h1 class="title text-center my-4 fw-bold">I nostri programmatori</h1>
     <div class="row">
-      <div class="col" v-for="developer in developers">
+      <div class="col" v-for="developer,index in developers" :key="index">
         <DeveloperCard :developer="developer" />
       </div>
     </div>
