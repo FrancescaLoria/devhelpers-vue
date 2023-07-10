@@ -16,6 +16,11 @@ const router = createRouter({
             name:'search',
             component:AdvancedSearch
         },
+        {
+            path:'/details/:id',
+            name:'developerDetails',
+            component:AdvancedSearch
+        },
     ]
 });
 
