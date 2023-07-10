@@ -1,5 +1,6 @@
 <script>
-import DevelopersCard from '../components/DevelopersCard.vue';
+import DeveloperCard from '../components/DeveloperCard.vue';
+import SearchBar from '../components/SearchBar.vue';
 export default {
     name: "AdvancedSearch",
     data() {
@@ -9,26 +10,14 @@ export default {
         }
     },
     components: {
-        DevelopersCard,
+        DeveloperCard,
+        SearchBar
     }
 }
 </script>
 
 <template>
-    <div class="container">
-        <h1 class="title text-center my-4 fw-bold">I nostri programmatori</h1>
-        <div class="row">
-            <div class="col" v-for="x in 20">
-                <DevelopersCard />
-            </div>
-        </div>
-    </div>
+    <SearchBar />
 </template>
 
-<style lang="scss" scoped>
-@use "../styles/partials/variables" as *;
-
-.title {
-    color: $dark-green;
-}
-</style>
+<style lang="scss" scoped></style>
