@@ -33,23 +33,48 @@ export default {
         <div class="container">
             <div class="ms_container py-3">
                 <h1 class="text-center developer-name">{{ `${developer.name} ${developer.surname}` }}</h1>
-                <div class="container-img ">
-                    <img v-if="developer.photo" :src="`${store.apiUrl}/storage/${developer.photo}`" alt="">
-                    <img v-else src="../assets/image/webdeveloper.jpg" alt="">
+                <div class="profile">
+                    <div class="container-img ">
+                        <img v-if="developer.photo" :src="`${store.apiUrl}/storage/${developer.photo}`" alt="">
+                        <img v-else src="../assets/image/webdeveloper.jpg" alt="">
+                    </div>
+                    <div class="card">
+                        <div class="text">
+                            <div class="info">
+                                <div class="email">EMAIL: {{ developer.email }}</div>
+                                <div class="addres">INDIRIZZO: {{ developer.address }}</div>
+                                <div class="github">GITHUB: {{ developer.github }}</div>
+                                <div class="phone">TELEFONO: {{ developer.phone }}</div>
+                                <div class="description">DESCRIZIONE: {{ developer.description }}</div>
+                                <div class="skills">ABILITA': {{ developer.skills }}</div>
+                            </div>
+                            <div class="tecnologie">
+                                <div class="technologies">
+                                    <h4>Tecnologie</h4>
+                                    <ul>
+                                        <li v-for="technology in developer.technologies">{{ technology.name }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="email">{{ developer.email }}</div>
-                <div class="addres">{{ developer.address }}</div>
-                <div class="github">{{ developer.github }}</div>
-                <div class="phone">{{ developer.phone }}</div>
-                <div class="description">{{ developer.description }}</div>
-                <div class="skills">{{ developer.skills }}</div>
-                <div class="technologies">
-                    <h4>Tecnologie</h4>
-                    <ul>
-                        <li v-for="technology in developer.technologies">{{ technology.name }}</li>
-                    </ul>
+                <div class="container-btn text-center">
+                    <button class="btn text-black fw-bold">
+                        <a href="">CONTATTAMI</a>
+                    </button>
                 </div>
 
+
+
+
+            </div>
+            <p class="fw-bold text-center my-3">Sei soddisfatto del mio lavoro? Lasciami una recensione!</p>
+            <div class="container-btn text-center">
+                <button class="btn text-black fw-bold">
+                    <a href=""><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i><i
+                            class="fa-regular fa-star"></i></a>
+                </button>
             </div>
         </div>
     </div>
@@ -87,5 +112,41 @@ export default {
         border-radius: 50%;
         object-fit: cover;
     }
+}
+
+.card {
+    margin: 20px 50px;
+    padding: 25px;
+}
+
+.btn {
+    background-color: $pink;
+    color: $light-green;
+
+    a {
+        text-decoration: none;
+        color: unset;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+
+    .container-img {
+        margin: auto 0;
+        margin-left: 40px;
+    }
+
+    .profile {
+        display: flex;
+    }
+
+    .text {
+        display: flex;
+    }
+
+    .tecnologie {
+        margin-left: 25px;
+    }
+
 }
 </style>
