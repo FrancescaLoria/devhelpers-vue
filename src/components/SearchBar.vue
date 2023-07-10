@@ -64,9 +64,24 @@ export default {
     <label for="technologies">{{ technology.name }}</label>
   </div>
 
-  <div v-for="developer in developers">
+  <!-- <div v-for="developer in developers">
     <DeveloperCard :developer="developer" />
+  </div> -->
+
+  <div class="container">
+    <h1 class="title text-center my-4 fw-bold">I nostri programmatori</h1>
+    <div class="row">
+      <div class="col" v-for="developer in developers">
+        <DeveloperCard :developer="developer" />
+      </div>
+    </div>
   </div>
 </template>
 
-<style></style>
+<style lang="scss" scoped>
+@use "../styles/partials/variables" as *;
+
+.title {
+  color: $dark-green;
+}
+</style>
