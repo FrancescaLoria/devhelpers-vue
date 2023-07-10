@@ -18,7 +18,7 @@ export default {
       ids: [],
       idsString: "",
       developerVote:[],
-      filteredDeveloper:[]
+      filteredDevelopers:[]
       // paramsToString: ""
     };
   },
@@ -78,7 +78,7 @@ export default {
   <div class="container">
     <h1 class="title text-center my-4 fw-bold">I nostri programmatori</h1>
     <div class="row">
-      <div class="col" v-for="developer,index in developers" :key="index">
+      <div class="col" v-for="developer,index in filteredDevelopers" :key="index">
         <DeveloperCard :developer="developer" />
       </div>
     </div>
