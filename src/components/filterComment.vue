@@ -3,10 +3,10 @@ import axios from 'axios';
 import { store } from "../store";
 
 export default {
-    name: 'Filters',
+    name: 'filteComment',
     data() {
         return {
-            selectedVote: '',
+            countComment: '',
             store,
         }
     },
@@ -14,8 +14,8 @@ export default {
 </script>
 
 <template>
-    <h1>vote</h1>
-    <select name="vote" v-model="selectedVote" id="vote" @change="$emit('filterByVote', selectedVote)">
+    <h1>comments</h1>
+    <select name="comment" v-model="countComment" id="comment" @change="$emit('filterByComment', countComment)">
         <option value="">All</option>
         <option value="1">1</option>
         <option value="2">2</option>
