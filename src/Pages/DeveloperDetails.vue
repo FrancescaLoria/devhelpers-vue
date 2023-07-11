@@ -69,7 +69,7 @@ export default {
 
 
             </div>
-            <p class="fw-bold text-center my-3">Sei soddisfatto del mio lavoro? Lasciami una recensione!</p>
+            <p class="fw-bold text-center my-5">Sei soddisfatto del mio lavoro? Lasciami una recensione!</p>
             <div class="container-btn text-center">
                 <button class="btn text-black fw-bold">
                     <a href=""><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i><i
@@ -117,6 +117,13 @@ export default {
 .card {
     margin: 20px 50px;
     padding: 25px;
+    text-align: center;
+
+    .text {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 25px;
+    }
 }
 
 .btn {
@@ -129,7 +136,23 @@ export default {
     }
 }
 
+.tecnologie {
+    margin-top: 20px;
+
+    ul {
+        list-style-type: none;
+        padding: unset;
+    }
+}
+
+
+// DESKTOP
 @media screen and (min-width: 1024px) {
+
+    .ms_container {
+        width: 70%;
+
+    }
 
     .container-img {
         margin: auto 0;
@@ -144,8 +167,16 @@ export default {
         display: flex;
     }
 
-    .tecnologie {
-        margin-left: 25px;
+}
+
+//LARGE DISPLAYS
+@media screen and (min-width: 1200px) {
+
+    .text {
+
+        .tecnologie {
+            margin-top: unset;
+        }
     }
 
 }
