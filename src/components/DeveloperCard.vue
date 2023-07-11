@@ -19,11 +19,12 @@ export default {
         <div class="card-body">
             <h5 class="card-title">{{ developer.name }}</h5>
             <h6 class="card-subtitle mb-2 text-body-secondary">{{ developer.surname }}</h6>
-            <ul class="card-text" v-for="item,index in developer.technologies" :key="index">
+            <ul class="card-text" v-for="item, index in developer.technologies" :key="index">
                 <li>{{ item.name }}</li>
             </ul>
             <button type="button" class="btn">
-                <router-link :to="{ name: 'developerDetails', params:{id:developer.id} }" class=" card-link">Details</router-link>
+                <router-link :to="{ name: 'developerDetails', params: { id: developer.id } }"
+                    class=" card-link">Details</router-link>
             </button>
 
 
