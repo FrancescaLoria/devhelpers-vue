@@ -1,15 +1,18 @@
 <script>
 import { store } from "../store";
 import axios from "axios";
+import ReviewCard from "../components/ReviewCard.vue";
 export default {
   name: "DeveloperDetails",
+  components: { ReviewCard },
   data() {
     return {
       store,
       developer: "",
       name: '',
       vote: '',
-      comment: ''
+      comment: '',
+      reviews: []
     };
   },
   mounted() {
@@ -26,8 +29,18 @@ export default {
         }
       }
     );
+
+    this.retrieveDeveloperReview()
   },
   methods: {
+
+    // Funzione per recuperare le recensioni di uno sviluppatore
+    retrieveDeveloperReview() {
+      axios.get(`${store.apiUrl}/api/developer_reviews/${this.$route.params.id}`).then(resp => {
+        this.reviews = resp.data.reviews
+      })
+    },
+
     getPostReview() {
       const data = {
         name: this.name,
@@ -35,11 +48,20 @@ export default {
         comment: this.comment,
         user_id: this.$route.params.id
       }
+      // Chiamata per salvare una nuova recensione
       axios.post(`${store.apiUrl}/api/reviews/store`, data).then(() => {
         this.name = '';
         this.vote = '';
         this.comment = '';
+
+        // Chiamata per recuperare le recensioni di uno sviluppatore
+        // Eseguo la chiamata per recuperare le recensioni dopo averne salvata una, per evitare il ricaricamento della pagina prima di poterle vedere
+        this.retrieveDeveloperReview()
       })
+
+
+
+
     }
   }
 };
@@ -117,6 +139,12 @@ export default {
           </form>
         </div>
       </div>
+      <h5 class="text-center">Recensioni</h5>
+      <div class="reviews-container" v-if="reviews.length">
+        <ReviewCard v-for="review in reviews" :key="review.id" :review="review" />
+      </div>
+      <div class="text-center" v-else>Non ci sono recensioni al momento</div>
+
     </div>
   </div>
 </template>
