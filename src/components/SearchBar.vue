@@ -4,11 +4,13 @@ import { store } from "../store";
 import DeveloperCard from "./DeveloperCard.vue";
 import Filters from './Filters.vue';
 
+import { RouterLink } from 'vue-router';
 export default {
   name: "SearchBar",
   components: {
     DeveloperCard,
     Filters,
+    RouterLink
   },
   data() {
     return {
@@ -22,6 +24,7 @@ export default {
   },
   mounted() {
     this.getTechnology();
+    this.getDeveloper(this.$route.params.id);
   },
   methods: {
     getTechnology() {
@@ -62,7 +65,7 @@ export default {
   },
   computed: {
     filteredDevelopers() {
-      // Non funziona bene
+      console.log(this.$route.params.id);
       if (this.developersByVote != '') {
         let filteredDevelopers = [];
         this.developersByVote.forEach(elem => {
@@ -85,7 +88,8 @@ export default {
 
 <template>
   <div v-for="technology in technologies" :key="technology.id">
-    <input @change="getDeveloper(technology.id)" id="technology" type="checkbox" :value="technology.id" />
+    <input :checked="technology.id == this.$route.params.id" @change="getDeveloper(technology.id)" id="technology"
+      type="checkbox" :value="technology.id" />
     <label for="technologies">{{ technology.name }}</label>
   </div>
   <Filters @filterByVote="getFilterVote" />

@@ -14,8 +14,8 @@ const router = createRouter({
       component: HomePage,
     },
     {
-      path: "/search",
-      name: "search",
+      path: "/search/:id",
+      name: "searchDev",
       component: AdvancedSearch,
     },
     {
