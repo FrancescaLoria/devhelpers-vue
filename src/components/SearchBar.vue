@@ -21,7 +21,7 @@ export default {
       ids: [],  // Array di id
       idsString: "",  // Sringa con id collegati con &
       developersByComment: [], // Developers filtrati in base al numero di recensioni (>=)
-      
+
     };
   },
   mounted() {
@@ -84,7 +84,7 @@ export default {
         let filteredDevelopers = [];
         this.developersByVote.forEach(elem => {
           this.developers.forEach(dev => {
-            this.developersByComment.forEach(comment =>{
+            this.developersByComment.forEach(comment => {
               if (dev.id === elem.id && elem.id === comment.id) {
                 filteredDevelopers.push(dev);
                 console.log(filteredDevelopers);
@@ -103,17 +103,37 @@ export default {
 </script>
 
 <template>
-  <div v-for="technology in technologies" :key="technology.id">
-    <input @change="getDeveloper(technology.id)" id="technology" type="checkbox" :value="technology.id" />
-    <label for="technologies">{{ technology.name }}</label>
-  </div>
-  <Filters @filterByVote="getFilterVote" />
-  <filterComment @filterByComment="getFilterComment" />
+ 
+
+
 
   <div class="container">
-    <h1 class="title text-center my-4 fw-bold">I nostri programmatori</h1>
-    <div v-if="filteredDevelopers.length !== 0">
+    <div class="ms-container">
+      <h3 class="title text-center my-4 fw-bold">Scegli i linguaggi che ti interressano</h3>
+
+      <div class="row p-4 justify-content-between">
+        <div class="pretty p-icon p-round p-tada col-md-3 mb-2 fs-5 " v-for="technology in technologies" :key="technology.id">
+        <input @change="getDeveloper(technology.id)" id="technology" type="checkbox" :value="technology.id" />
+        <div class="state p-success">
+          <!-- <i class="icon fa-regular fa-heart"></i> -->
+          <i class="icon fa-solid fa-heart"></i>
     
+          <label for="technologies">{{ technology.name }}</label>
+        </div>
+      </div>
+  
+      </div>
+    </div>
+    <h3 class="title text-center my-4 fw-bold">Fai una ricerca avanzata:</h3>
+
+    <div class="d-flex justify-content-evenly">
+      <Filters @filterByVote="getFilterVote" />
+      <filterComment @filterByComment="getFilterComment" />
+
+    </div>
+    <h2 class="title text-center my-4 fw-bold">I nostri programmatori</h2>
+    <div v-if="filteredDevelopers.length !== 0">
+
       <div class="row">
         <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
           <DeveloperCard :developer="developer" />
@@ -134,5 +154,9 @@ export default {
 
 .title {
   color: $dark-green;
+}
+.ms-container {
+  width: 80%;
+  margin: 0 auto;
 }
 </style>
