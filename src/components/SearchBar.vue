@@ -3,8 +3,8 @@ import axios from 'axios';
 import { store } from "../store";
 import DeveloperCard from "./DeveloperCard.vue";
 import Filters from './Filters.vue';
-
 import { RouterLink } from 'vue-router';
+
 export default {
   name: "SearchBar",
   components: {
@@ -24,14 +24,16 @@ export default {
   },
   mounted() {
     this.getTechnology();
-    this.getDeveloper(this.$route.params.id);
+    this.getDeveloper(parseInt(this.$route.params.id));
   },
   methods: {
+    // Prendi le tecnologie
     getTechnology() {
       axios.get(`${this.store.apiUrl}/api/technologies`).then((resp) => {
         this.technologies = resp.data.results;
       });
     },
+    // Prendi i developer
     getDeveloper(id) {
       if (this.ids.includes(id)) {
         const index = this.ids.indexOf(id);
@@ -41,14 +43,15 @@ export default {
       }
 
       this.idsString = this.ids.join('&');
-      console.log(this.idsString);
 
       axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString).then((resp) => {
         console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
-        console.log("Resp.data.results", resp);
+        // console.log("Resp.data.results", resp);
         this.developers = (resp.data.results);
+        console.log(this.developers);
       })
     },
+    // Filtra per voti
     getFilterVote(vote) {
       console.log("Voto", vote);
       // Non funziona bene
@@ -64,8 +67,8 @@ export default {
     },
   },
   computed: {
+    // Filtro sui developer
     filteredDevelopers() {
-      console.log(this.$route.params.id);
       if (this.developersByVote != '') {
         let filteredDevelopers = [];
         this.developersByVote.forEach(elem => {
@@ -97,9 +100,6 @@ export default {
   <div class="container">
     <h1 class="title text-center my-4 fw-bold">I nostri programmatori</h1>
     <div class="row">
-      <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
-        <DeveloperCard :developer="developer" />
-      </div> -->
       <div class="col" v-for="developer in filteredDevelopers" :key="developer.id">
         <DeveloperCard :developer="developer" />
       </div>
