@@ -33,14 +33,14 @@ export default {
   },
   methods: {
     getPostReview() {
-        const data = {
-            name: this.name,
-            vote: this.vote,
-            comment: this.comment
-        }
-        axios.post(`${store.apiUrl}/api/reviews/store`, data).then(resp => {
-            console.log(resp);
-        })
+      const data = {
+        name: this.name,
+        vote: this.vote,
+        comment: this.comment
+      }
+      axios.post(`${store.apiUrl}/api/reviews/store`, data).then(resp => {
+        console.log(resp);
+      })
     }
   }
 };
@@ -55,11 +55,7 @@ export default {
         </h1>
         <div class="profile">
           <div class="container-img">
-            <img
-              v-if="developer.photo"
-              :src="`${store.apiUrl}/storage/${developer.photo}`"
-              alt=""
-            />
+            <img v-if="developer.photo" :src="`${store.apiUrl}/storage/${developer.photo}`" alt="" />
             <img v-else src="../assets/image/webdeveloper.jpg" alt="" />
           </div>
           <div class="card">
@@ -100,20 +96,15 @@ export default {
         <div class="container-btn">
           <div class="mb-3">
             <label for="name" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="name" v-model="name"/>
+            <input type="text" class="form-control" id="name" v-model="name" />
           </div>
           <div class="mb-3">
             <label for="vote" class="form-label">Lascia un voto</label>
-            <input type="number" class="form-control " id="vote" min="1"  max="5" v-model="vote"/>
+            <input type="number" class="form-control " id="vote" min="1" max="5" v-model="vote" />
           </div>
           <div class="mb-3">
             <label for="comment" class="form-label">Lascia un commento</label>
-            <textarea
-              class="form-control"
-              id="comment"
-              rows="3"
-              v-model="comment"
-            ></textarea>
+            <textarea class="form-control" id="comment" rows="3" v-model="comment"></textarea>
           </div>
           <button class="btn text-black fw-bold" type="submit" @click="getPostReview()">Invia</button>
         </div>
