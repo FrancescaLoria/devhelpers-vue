@@ -1,6 +1,16 @@
 <script>
 export default {
-    name: 'Header'
+    name: 'Header',
+    data() {
+        return {
+            MenuItems: [
+                {
+                    label: '',
+                    routeName: 'Home'
+                }
+            ]
+        }
+    }
 }
 
 
@@ -13,7 +23,10 @@ export default {
         <nav class="navbar navbar-expand-md shadow-sm navigation">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="">
-                    <div class="logo fw-bold">DevHelpers</div>
+                    <div class="logo fw-bold">
+                        <router-link :to="{ name: MenuItems[0].routeName }" class="nav-link" aria-current="page">DevHelpers</router-link>
+                                
+                                </div>
 
                 </a>
 
@@ -27,7 +40,7 @@ export default {
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto ms-2">
                         <li class="nav-item">
-                            <a class="nav-link" href="">Home</a>
+                            <router-link :to="{ name: MenuItems[0].routeName }" class="nav-link" aria-current="page">Home</router-link>
                         </li>
                     </ul>
 
