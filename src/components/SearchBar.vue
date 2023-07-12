@@ -21,18 +21,21 @@ export default {
       ids: [],  // Array di id
       idsString: "",  // Sringa con id collegati con &
       developersByComment: [], // Developers filtrati in base al numero di recensioni (>=)
-      
+
     };
   },
   mounted() {
     this.getTechnology();
+    this.getDeveloper(parseInt(this.$route.params.id));
   },
   methods: {
+    // Prendi le tecnologie
     getTechnology() {
       axios.get(`${this.store.apiUrl}/api/technologies`).then((resp) => {
         this.technologies = resp.data.results;
       });
     },
+    // Prendi i developer
     getDeveloper(id) {
       if (this.ids.includes(id)) {
         const index = this.ids.indexOf(id);
@@ -42,14 +45,15 @@ export default {
       }
 
       this.idsString = this.ids.join('&');
-      console.log(this.idsString);
 
       axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString).then((resp) => {
         console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
-        console.log("Resp.data.results", resp);
+        // console.log("Resp.data.results", resp);
         this.developers = (resp.data.results);
+        console.log(this.developers);
       })
     },
+    // Filtra per voti
     getFilterVote(vote) {
       console.log("Voto", vote);
       // Non funziona bene
@@ -78,13 +82,14 @@ export default {
     },
   },
   computed: {
+    // Filtro sui developer
     filteredDevelopers() {
       // Non funziona bene
       if (this.developersByVote != '' || this.developersByComment != '') {
         let filteredDevelopers = [];
         this.developersByVote.forEach(elem => {
           this.developers.forEach(dev => {
-            this.developersByComment.forEach(comment =>{
+            this.developersByComment.forEach(comment => {
               if (dev.id === elem.id && elem.id === comment.id) {
                 filteredDevelopers.push(dev);
                 console.log(filteredDevelopers);
@@ -104,7 +109,8 @@ export default {
 
 <template>
   <div v-for="technology in technologies" :key="technology.id">
-    <input @change="getDeveloper(technology.id)" id="technology" type="checkbox" :value="technology.id" />
+    <input :checked="technology.id == this.$route.params.id" @change="getDeveloper(technology.id)" id="technology"
+      type="checkbox" :value="technology.id" />
     <label for="technologies">{{ technology.name }}</label>
   </div>
   <Filters @filterByVote="getFilterVote" />
@@ -113,7 +119,7 @@ export default {
   <div class="container">
     <h1 class="title text-center my-4 fw-bold">I nostri programmatori</h1>
     <div v-if="filteredDevelopers.length !== 0">
-    
+
       <div class="row">
         <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
           <DeveloperCard :developer="developer" />
