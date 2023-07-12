@@ -7,6 +7,7 @@ import filterComment from './filterComment.vue';
 
 export default {
   name: "SearchBar",
+  emits:['filterByVote', 'filterByComment'],
   components: {
     DeveloperCard,
     Filters,
@@ -48,6 +49,7 @@ export default {
         console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
         console.log("Resp.data.results", resp);
         this.developers = (resp.data.results);
+        console.log('developers', this.developers);
       })
     },
     getFilterVote(vote) {
@@ -80,24 +82,43 @@ export default {
   computed: {
     filteredDevelopers() {
       // Non funziona bene
-      if (this.developersByVote != '' || this.developersByComment != '') {
-        let filteredDevelopers = [];
-        this.developersByVote.forEach(elem => {
+      let filteredDevelopers = [];
+      if (this.developersByVote != '' && this.developersByComment != '') {
+        this.developersByComment.forEach(comment => {
           this.developers.forEach(dev => {
-            this.developersByComment.forEach(comment =>{
-              if (dev.id === elem.id && elem.id === comment.id) {
+            this.developersByVote.forEach(elem => {              
+              if (dev.id === comment.id && elem.id === dev.id) {
                 filteredDevelopers.push(dev);
                 console.log(filteredDevelopers);
-              }
-            })
+              } 
+            });
           })
-        });
+        })
         console.log("Filtrati", filteredDevelopers);
         return filteredDevelopers;
+      } else if (this.developersByComment != '') {
+        this.developersByComment.forEach(comment => {
+          this.developers.forEach(dev => {
+              if (dev.id === comment.id) {
+                filteredDevelopers.push(dev);
+                console.log(filteredDevelopers);
+              } 
+          })
+        })
+      } else if (this.developersByVote != '') {
+        this.developersByVote.forEach(vote => {
+          this.developers.forEach(dev => {
+              if (dev.id === vote.id) {
+                filteredDevelopers.push(dev);
+                console.log(filteredDevelopers);
+              } 
+          })
+        })
       } else {
-        return this.developers;
+        filteredDevelopers = this.developers
       }
-    }
+      return filteredDevelopers
+    } 
   }
 };
 </script>

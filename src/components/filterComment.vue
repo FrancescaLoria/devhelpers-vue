@@ -4,6 +4,7 @@ import { store } from "../store";
 
 export default {
     name: 'filteComment',
+    emits:['filterByComment'],
     data() {
         return {
             countComment: '',

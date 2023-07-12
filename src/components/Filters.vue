@@ -4,6 +4,7 @@ import { store } from "../store";
 
 export default {
     name: 'Filters',
+    emits:['filterByVote'],
     data() {
         return {
             selectedVote: '',

@@ -52,7 +52,7 @@ export default {
                                 <div class="technologies">
                                     <h4>Tecnologie</h4>
                                     <ul>
-                                        <li v-for="technology in developer.technologies">{{ technology.name }}</li>
+                                        <li v-for="technology,id in developer.technologies" :key="id">{{ technology.name }}</li>
                                     </ul>
                                 </div>
                             </div>
