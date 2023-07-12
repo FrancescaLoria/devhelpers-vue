@@ -108,7 +108,7 @@ export default {
 </script>
 
 <template>
-  <div v-for="technology in technologies" :key="technology.id">
+  <!-- <div v-for="technology in technologies" :key="technology.id">
     <input :checked="technology.id == this.$route.params.id" @change="getDeveloper(technology.id)" id="technology"
       type="checkbox" :value="technology.id" />
     <label for="technologies">{{ technology.name }}</label>
@@ -117,7 +117,7 @@ export default {
   <filterComment @filterByComment="getFilterComment" />
 
   <div class="container">
-    <h1 class="title text-center my-4 fw-bold">I nostri programmatori</h1>
+    <h1 class="title text-center my-4 fw-bold">I nostri programmatori</h1> -->
  
 
 
@@ -128,7 +128,7 @@ export default {
 
       <div class="row p-4 justify-content-between">
         <div class="pretty p-icon p-round p-tada col-md-3 mb-2 fs-5 " v-for="technology in technologies" :key="technology.id">
-        <input @change="getDeveloper(technology.id)" id="technology" type="checkbox" :value="technology.id" />
+        <input :checked="technology.id == this.$route.params.id" @change="getDeveloper(technology.id)" id="technology" type="checkbox" :value="technology.id" />
         <div class="state p-success">
           <!-- <i class="icon fa-regular fa-heart"></i> -->
           <i class="icon fa-solid fa-heart"></i>
