@@ -34,7 +34,7 @@ export default {
 </script>
 
 <template>
-    <div class="jumbo">
+    <div class="jumbo pb-4">
         <div class="jumbo-banner">
             <div class="ms_container">
                 <div class="jumbo-top-4">
@@ -46,13 +46,9 @@ export default {
                                     tua azienda?
                                 </h2>
 
-                                <p class=" title-jumbo mt-4 ">Lorem ipsum, dolor sit amet consectetur adipisicing elit. </p>
+                                <!-- <p class=" title-jumbo mt-4 ">Lorem ipsum, dolor sit amet consectetur adipisicing elit. </p> -->
 
-                                <div v-for="technology in technologies" :key="technology.id">
-                                    <input @click="changePage(technology.id)" id="technology" type="checkbox"
-                                        :value="technology.id" />
-                                    <label for="technologies">{{ technology.name }}</label>
-                                </div>
+
 
                             </div>
 
@@ -67,14 +63,33 @@ export default {
 
 
         </div>
-        <div class="adv-search">
-            <div class="adv-search-box d-flex flex-column align-items-center">
+        <div class="adv-search mt-4">
+            <div class="adv-search-box d-flex flex-column align-items-center ">
 
 
-                <h5 class="text-white mb-4 text-center fw-light">Stai cercando un programmatore specializzato per la tua
+                <h5 class="mb-4 text-center fw-light ">Stai cercando un programmatore specializzato per la tua
                     azienda??</h5>
                 <!-- <router-link class="btn btn-light text-decoration-none" :to="{ name: MenuItems[0].routeName }">{{
                     MenuItems[0].label }}</router-link> -->
+
+                <!-- <div v-for="technology in technologies" :key="technology.id">
+                    <input @click="changePage(technology.id)" id="technology" type="checkbox" :value="technology.id" />
+                    <label for="technologies">{{ technology.name }}</label>
+                </div> -->
+
+                <div class="row p-4 justify-content-between">
+                    <div class="pretty p-icon p-round p-tada col-md-3 mb-2 fs-5 " v-for="technology in technologies"
+                        :key="technology.id">
+                        <input @click="changePage(technology.id)" id="technology" type="checkbox" :value="technology.id" />
+                        <div class="state p-success">
+                            <!-- <i class="icon fa-regular fa-heart"></i> -->
+                            <i class="icon fa-solid fa-heart"></i>
+
+                            <label for="technologies">{{ technology.name }}</label>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
 
@@ -85,11 +100,12 @@ export default {
 @use "../styles/partials/variables" as *;
 
 .jumbo {
-    height: 100vh;
-    background-image: url(src/assets/image/8764038.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    background-color: $light-green;
+    // height: 100vh;
+    // background-image: url(src/assets/image/8764038.jpg);
+    // background-repeat: no-repeat;
+    // background-size: cover;
+    // background-position: center;
 
     .jumbo-banner {
         width: 100%;
@@ -111,16 +127,21 @@ export default {
     }
 }
 
-
+.ms-container {
+    width: 80%;
+    margin: 0 auto;
+}
 
 
 .adv-search {
     padding: 20px;
-
-    background-color: black;
+    width: 80%;
+    margin: 0 auto;
+    background-color: $bkg-light;
+    border-radius: 20px;
 
     .adv-search-box {
-        width: 60%;
+        width: 80%;
         margin: 0 auto;
 
     }
