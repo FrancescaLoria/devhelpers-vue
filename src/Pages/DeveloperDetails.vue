@@ -2,9 +2,10 @@
 import { store } from "../store";
 import axios from "axios";
 import ReviewCard from "../components/ReviewCard.vue";
+import Message from "../components/Message.vue";
 export default {
   name: "DeveloperDetails",
-  components: { ReviewCard },
+  components: { ReviewCard, Message },
   data() {
     return {
       store,
@@ -105,9 +106,7 @@ export default {
           </div>
         </div>
         <div class="container-btn text-center">
-          <button class="btn text-black fw-bold">
-            <a href="">CONTATTAMI</a>
-          </button>
+          <Message />
         </div>
       </div>
       <p class="fw-bold text-center my-5">
