@@ -36,7 +36,8 @@ export default {
       const data = {
         name: this.name,
         vote: this.vote,
-        comment: this.comment
+        comment: this.comment,
+        user_id: this.$route.params.id
       }
       axios.post(`${store.apiUrl}/api/reviews/store`, data).then(resp => {
         console.log(resp);
