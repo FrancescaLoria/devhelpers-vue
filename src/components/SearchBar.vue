@@ -50,7 +50,7 @@ export default {
         console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
         // console.log("Resp.data.results", resp);
         this.developers = (resp.data.results);
-        console.log(this.developers);
+        console.log("developers per tecnologia", this.developers);
       })
     },
     // Filtra per voti
@@ -85,23 +85,64 @@ export default {
     // Filtro sui developer
     filteredDevelopers() {
       // Non funziona bene
-      if (this.developersByVote != '' || this.developersByComment != '') {
-        let filteredDevelopers = [];
+      let filteredDevelopers = [];
+      if (this.developersByVote != '' && this.developersByComment != '') {
         this.developersByVote.forEach(elem => {
-          this.developers.forEach(dev => {
-            this.developersByComment.forEach(comment => {
-              if (dev.id === elem.id && elem.id === comment.id) {
+          console.log(elem);
+          this.developersByComment.forEach(comment => {
+            console.log(comment);
+            this.developers.forEach(dev => {
+              console.log(comment);
+              if (elem.id === comment.id === dev.id) {
                 filteredDevelopers.push(dev);
-                console.log(filteredDevelopers);
               }
+              console.log("Filtrati", filteredDevelopers);
+
+              // this.developersByComment.forEach(comment => {
+              // })
             })
           })
         });
+      } else if (this.developersByVote == '' && this.developersByComment == '') {
+        console.log(this.developersByComment);
+        console.log(this.developersByVote);
+        filteredDevelopers = this.developers;
+      } else if (this.developersByComment != '') {
+        if (this.idsString != '') {
+          this.developersByComment.forEach(comment => {
+            this.developers.forEach(dev => {
+              if (dev.id === comment.id) {
+                filteredDevelopers.push(dev);
+              }
+            })
+          });
+        } else {
+          filteredDevelopers = this.developersByComment;
+        }
         console.log("Filtrati", filteredDevelopers);
-        return filteredDevelopers;
-      } else {
-        return this.developers;
+        // this.developersByComment = '';
+        // return filteredDevelopers;
+      } else if (this.developersByVote != '') {
+        console.log("ids", this.ids);
+        console.log("idsString", this.idsString);
+
+        if (this.idsString != '') {
+          this.developersByVote.forEach(elem => {
+            this.developers.forEach(dev => {
+              if (dev.id === elem.id) {
+                filteredDevelopers.push(dev);
+              }
+              // this.developersByComment.forEach(comment => {
+              // })
+            })
+          });
+        } else {
+          filteredDevelopers = this.developersByVote;
+        }
+        console.log("Filtrati", filteredDevelopers);
+        // this.developersByVote = '';
       }
+      return filteredDevelopers;
     }
   }
 };
