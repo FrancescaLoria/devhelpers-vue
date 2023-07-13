@@ -1,32 +1,28 @@
 <script>
 import { store } from "../store";
 import axios from "axios";
+import ReviewCard from "../components/ReviewCard.vue";
 import Message from "../components/Message.vue";
 export default {
   name: "DeveloperDetails",
-  components: {
-    Message
-  },
+  components: { ReviewCard, Message },
   data() {
     return {
       store,
       developer: "",
-      name: "",
-      vote: [],
-      comment: "",
+      name: '',
+      vote: '',
+      comment: '',
+      reviews: []
     };
   },
   mounted() {
-    console.log(this.$route);
     const id = this.$route.params.id;
     axios.get(`${store.apiUrl}/api/developer/${id}`).then(
       (resp) => {
-        console.log(resp);
         this.developer = resp.data.result;
-        console.log(this.developer);
       },
       (error) => {
-        console.log(error);
         if (error.response.status === 404) {
           this.$router.push({ name: "NotFound" });
         } else {
@@ -34,21 +30,41 @@ export default {
         }
       }
     );
+
+    this.retrieveDeveloperReview()
   },
   methods: {
+
+    // Funzione per recuperare le recensioni di uno sviluppatore
+    retrieveDeveloperReview() {
+      axios.get(`${store.apiUrl}/api/developer_reviews/${this.$route.params.id}`).then(resp => {
+        this.reviews = resp.data.reviews
+      })
+    },
+
     getPostReview() {
       const data = {
         name: this.name,
         vote: this.vote,
         comment: this.comment,
-        user_id: this.$route.params.id,
-      };
-      axios.post(`${store.apiUrl}/api/reviews/store`, data).then((resp) => {
-        console.log(resp);
-      });
-    },
-    
-  },
+        user_id: this.$route.params.id
+      }
+      // Chiamata per salvare una nuova recensione
+      axios.post(`${store.apiUrl}/api/reviews/store`, data).then(() => {
+        this.name = '';
+        this.vote = '';
+        this.comment = '';
+
+        // Chiamata per recuperare le recensioni di uno sviluppatore
+        // Eseguo la chiamata per recuperare le recensioni dopo averne salvata una, per evitare il ricaricamento della pagina prima di poterle vedere
+        this.retrieveDeveloperReview()
+      })
+
+
+
+
+    }
+  }
 };
 </script>
 
@@ -61,11 +77,7 @@ export default {
         </h1>
         <div class="profile">
           <div class="container-img">
-            <img
-              v-if="developer.photo"
-              :src="`${store.apiUrl}/storage/${developer.photo}`"
-              alt=""
-            />
+            <img v-if="developer.photo" :src="`${store.apiUrl}/storage/${developer.photo}`" alt="" />
             <img v-else src="../assets/image/webdeveloper.jpg" alt="" />
           </div>
           <div class="card">
@@ -94,7 +106,7 @@ export default {
           </div>
         </div>
         <div class="container-btn text-center">
-          <Message/>
+          <Message />
         </div>
       </div>
       <p class="fw-bold text-center my-5">
@@ -102,39 +114,36 @@ export default {
       </p>
       <div class="card text-center">
         <div class="container-btn">
-          <div class="mb-3">
-            <label for="name" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="name" v-model="name" />
-          </div>
-          <div class="mb-3">
-            <label for="vote" class="form-label">Lascia un voto</label>
-            <input
-              type="number"
-              class="form-control"
-              id="vote"
-              min="1"
-              max="5"
-              v-model="vote"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="comment" class="form-label">Lascia un commento</label>
-            <textarea
-              class="form-control"
-              id="comment"
-              rows="3"
-              v-model="comment"
-            ></textarea>
-          </div>
-          <button
-            class="btn text-black fw-bold"
-            type="submit"
-            @click="getPostReview()"
-          >
-            Invia
-          </button>
+          <form @submit.prevent="getPostReview()">
+            <div class="mb-3">
+              <label for="name" class="form-label my-3">Nome</label>
+              <input type="text" required minlength="1" maxlength="50" class="form-control" id="name" v-model="name" />
+            </div>
+            <div class="vote my-3">Voto</div>
+            <div class="container-radio d-flex gap-2">
+              <div class="form-check" v-for="x in 5">
+                <input required class="form-check-input" name="vote-radio" type="radio" v-model="vote" :value="x"
+                  :id="'flexRadioDefault' + x">
+                <label class="form-check-label" :for="'flexRadioDefault' + x">
+                  {{ x }}
+                </label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="comment" class="form-label my-3">Lascia un commento</label>
+              <textarea required minlength="1" maxlength="500" class="form-control" id="comment" rows="3"
+                v-model="comment"></textarea>
+            </div>
+            <button class="btn text-black fw-bold" type="submit">Invia</button>
+          </form>
         </div>
       </div>
+      <h5 class="text-center">Recensioni</h5>
+      <div class="reviews-container" v-if="reviews.length">
+        <ReviewCard v-for="review in reviews" :key="review.id" :review="review" />
+      </div>
+      <div class="text-center" v-else>Non ci sono recensioni al momento</div>
+
     </div>
   </div>
 </template>
@@ -182,6 +191,13 @@ export default {
     justify-content: center;
     flex-wrap: wrap;
     gap: 25px;
+  }
+
+  .container-btn {
+    .container-radio {
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
   }
 }
 
