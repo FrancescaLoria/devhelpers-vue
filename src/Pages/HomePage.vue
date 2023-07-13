@@ -63,12 +63,12 @@ export default {
 
 
         </div>
-        <div class="adv-search mt-4">
+        <div class="adv-search mt-4 shadow-lg">
             <div class="adv-search-box d-flex flex-column align-items-center ">
 
 
-                <h5 class="mb-4 text-center fw-light ">Stai cercando un programmatore specializzato per la tua
-                    azienda??</h5>
+                <h3 class="mb-4 text-center fw-bold text-uppercase">Stai cercando un programmatore specializzato per la tua
+                    azienda??</h3>
                 <!-- <router-link class="btn btn-light text-decoration-none" :to="{ name: MenuItems[0].routeName }">{{
                     MenuItems[0].label }}</router-link> -->
 

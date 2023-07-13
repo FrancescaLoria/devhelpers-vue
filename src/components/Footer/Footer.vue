@@ -15,7 +15,7 @@ export default {
 </script>
 
 <template>
-    <footer>
+    <footer class="shadow-lg">
         <div class="container py-3">
 
             <div class="logo fw-bold ">
