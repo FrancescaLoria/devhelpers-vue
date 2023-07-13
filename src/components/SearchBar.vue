@@ -147,19 +147,25 @@ export default {
 
     </div>
     <h2 class="title text-center my-4 fw-bold">I nostri programmatori</h2>
-    <div v-if="filteredDevelopers.length !== 0">
+  </div>
+  <div class="dev-space">
 
-      <div class="row">
-        <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
-          <DeveloperCard :developer="developer" />
-        </div> -->
-        <div class="col" v-for="developer in filteredDevelopers" :key="developer.id">
-          <DeveloperCard :developer="developer" />
+    <div class="container p-4">
+  
+      <div  v-if="filteredDevelopers.length !== 0">
+    
+        <div class="row ">
+          <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
+            <DeveloperCard :developer="developer" />
+          </div> -->
+          <div class="col" v-for="developer in filteredDevelopers" :key="developer.id">
+            <DeveloperCard :developer="developer" />
+          </div>
         </div>
       </div>
-    </div>
-    <div v-else>
-      <p class="text-center">non ci sono programmatori relativi a questa ricerca</p>
+      <div v-else>
+        <p class="text-center">non ci sono programmatori relativi a questa ricerca</p>
+      </div>
     </div>
   </div>
 </template>
@@ -173,5 +179,10 @@ export default {
 .ms-container {
   width: 80%;
   margin: 0 auto;
+
+ 
 }
+ .dev-space {
+    background-color: $light-green;
+  }
 </style>
