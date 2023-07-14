@@ -112,6 +112,7 @@ export default {
         height: 400px;
         background-image: url(src/assets/image/brooke-cagle-ICTKcvnXx_8-unsplash-1.jpg);
         background-size: cover;
+        background-position: center;
 
 
 
