@@ -3,10 +3,9 @@ import axios from 'axios';
 import { store } from "../store";
 
 export default {
-    name: 'filteComment',
+    name: 'filterComment',
     data() {
         return {
-            countComment: '',
             store,
         }
     },
@@ -17,18 +16,16 @@ export default {
     <div class="rev-vote text-center">
 
         <h4>Numero di recensioni</h4>
-        <select class="form-select form-select-md " name="comment" v-model="countComment" id="comment" @change="$emit('filterByComment', countComment)">
+        <select class="form-select form-select-md " name="comment" v-model="store.selctedComment" id="comment"
+            @change="$emit('filterByComment', store.selctedComments)">
             <option value="">All</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
+            <option value="desc">Dal più votato</option>
+            <option value="asc">Dal meno votato</option>
+
         </select>
         <!-- <input type="range" min="0" max="10" name="comment" v-model="countComment" id="comment" @change="$emit('filterByComment', countComment)"> -->
 
     </div>
-
 </template>
 
 <style lang="scss" scoped></style>
