@@ -22,7 +22,8 @@ export default {
       developersByVote: [], // Developers filtrati in base alla media voto (>=)
       ids: [],  // Array di id
       idsString: "",  // Sringa con id collegati con &
-      developersByComment: [], // Developers filtrati in base al numero di recensioni (>=)
+      developersByComment: [],
+      loading: false, // Developers filtrati in base al numero di recensioni (>=)
 
       pageNumber: 1,
       currentPage: 1,
@@ -66,17 +67,27 @@ export default {
       
 
      
-      axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString, { params }).then((resp) => {
-        console.log(resp);
+      // axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString, { params }).then((resp) => {
+      //   console.log(resp);
     
-        // console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
+      //   // console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
+      //   // console.log("Resp.data.results", resp);
+      //   this.developers = (resp.data.results);
+      //   this.currentPage = resp.data.results.current_page;
+      //   this.lastPage = resp.data.results.last_page;
+      //   this.totalDevelopers = resp.data.results.total;
+      //   console.log(this.developers);
+
+      this.loading = true
+      axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString).then((resp) => {
+        console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
         // console.log("Resp.data.results", resp);
         this.developers = (resp.data.results);
-        this.currentPage = resp.data.results.current_page;
-        this.lastPage = resp.data.results.last_page;
-        this.totalDevelopers = resp.data.results.total;
-        console.log(this.developers);
-
+        console.log(this.developersByComment);
+        console.log(this.developersByVote);
+        console.log("developers per tecnologia", this.developers);
+      }).finally(() => {
+        this.loading = false
       })
     },
     // Filtra per voti
@@ -110,24 +121,63 @@ export default {
   computed: {
     // Filtro sui developer
     filteredDevelopers() {
-      // Non funziona bene
-      if (this.developersByVote != '' || this.developersByComment != '') {
-        let filteredDevelopers = [];
-        this.developersByVote.forEach(elem => {
-          this.developers.forEach(dev => {
-            this.developersByComment.forEach(comment => {
-              if (dev.id === elem.id && elem.id === comment.id) {
-                filteredDevelopers.push(dev);
-                console.log(filteredDevelopers);
+      let filteredDevelopers = [];
+      // Entrambi i filtri attivi
+      if (this.developersByVote != '' && this.developersByComment != '') {
+        if (this.idsString == '' && store.selectedVote == '' && store.selectedComment == '') {
+          filteredDevelopers = this.developers;
+        } else {
+          let tempDev = [];
+
+          this.developersByVote.forEach(elem => {
+            this.developers.forEach((dev) => {
+              if (dev.id === elem.id) {
+                tempDev.push(dev);
+              }
+            })
+          });
+
+          this.developersByComment.forEach(comment => {
+            tempDev.forEach(temp => {
+              if (comment.id === temp.id) {
+                filteredDevelopers.push(temp);
               }
             })
           })
-        });
-        console.log("Filtrati", filteredDevelopers);
-        return filteredDevelopers;
-      } else {
-        return this.developers;
+        }
+
+        // Entrambi i filtri NON attivi
+      } else if (this.developersByVote == '' && this.developersByComment == '') {
+        // console.log("è tutto vuoto");
+        filteredDevelopers = this.developers;
+        // Filtro per recensioni attivo
+      } else if (this.developersByComment != '') {
+        if (this.idsString != '') {
+          this.developersByComment.forEach(comment => {
+            this.developers.forEach(dev => {
+              if (dev.id === comment.id) {
+                filteredDevelopers.push(dev);
+              }
+            })
+          });
+        } else {
+          filteredDevelopers = this.developersByComment;
+        }
+        // Filtro per voti attivo
+      } else if (this.developersByVote != '') {
+        if (this.idsString != '') {
+          this.developersByVote.forEach(elem => {
+            this.developers.forEach(dev => {
+              if (dev.id === elem.id) {
+                filteredDevelopers.push(dev);
+              }
+            })
+          });
+        } else {
+          filteredDevelopers = this.developersByVote;
+        }
       }
+      return filteredDevelopers;
     }
   }
 };
@@ -181,9 +231,9 @@ export default {
     <div class="container p-4">
 
       <div v-if="filteredDevelopers.length !== 0">
-        <!-- <router-link :to="{ name: 'single-project', params: { slug: project.slug } }" class="btn btn-info">More info</router-link> -->
 
-        <div class="row ">
+        <div class="text-center text-white" v-if="loading">Caricamento ...</div>
+        <div class="row " v-if="!loading">
           <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
             <DeveloperCard :developer="developer" />
           </div> -->

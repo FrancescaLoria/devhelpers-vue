@@ -13,7 +13,9 @@ export default {
       name: '',
       vote: '',
       comment: '',
-      reviews: []
+      reviews: [],
+      loading: false,
+      messageSend: false,
     };
   },
   mounted() {
@@ -43,6 +45,7 @@ export default {
     },
 
     getPostReview() {
+      this.loading = true
       const data = {
         name: this.name,
         vote: this.vote,
@@ -58,9 +61,11 @@ export default {
         // Chiamata per recuperare le recensioni di uno sviluppatore
         // Eseguo la chiamata per recuperare le recensioni dopo averne salvata una, per evitare il ricaricamento della pagina prima di poterle vedere
         this.retrieveDeveloperReview()
+      }).finally(() => {
+        this.loading = false
       })
 
-
+      this.messageSend = true
 
 
     }
@@ -83,20 +88,20 @@ export default {
           <div class="card">
             <div class="text">
               <div class="info">
-                <div class="email">EMAIL: {{ developer.email }}</div>
-                <div class="addres">INDIRIZZO: {{ developer.address }}</div>
-                <div class="github">GITHUB: {{ developer.github }}</div>
-                <div class="phone">TELEFONO: {{ developer.phone }}</div>
-                <div class="description">
-                  DESCRIZIONE: {{ developer.description }}
+                <div class="email"><span class="fw-bold">EMAIL:</span>  {{ developer.email }}</div>
+                <div class="addres"><span class="fw-bold">INDIRIZZO:</span> {{ developer.address }}</div>
+                <div class="github"><span class="fw-bold">GITHUB:</span> {{ developer.github }}</div>
+                <div class="phone"><span class="fw-bold">TELEFONO:</span> {{ developer.phone }}</div>
+                <div class="description"><span class="fw-bold">DESCRIZIONE:</span>
+                   {{ developer.description }}
                 </div>
-                <div class="skills">ABILITA': {{ developer.skills }}</div>
+                <div class="skills"><span class="fw-bold">ABILITA':</span> {{ developer.skills }}</div>
               </div>
               <div class="tecnologie">
                 <div class="technologies">
-                  <h4>Tecnologie</h4>
+                  <h4>TECNOLOGIE</h4>
                   <ul>
-                    <li v-for="technology in developer.technologies">
+                    <li v-for="technology,index in developer.technologies" :key="index">
                       {{ technology.name }}
                     </li>
                   </ul>
@@ -121,7 +126,7 @@ export default {
             </div>
             <div class="vote my-3">Voto</div>
             <div class="container-radio d-flex gap-2">
-              <div class="form-check" v-for="x in 5">
+              <div class="form-check" v-for="x,index in 5" :key="index">
                 <input required class="form-check-input" name="vote-radio" type="radio" v-model="vote" :value="x"
                   :id="'flexRadioDefault' + x">
                 <label class="form-check-label" :for="'flexRadioDefault' + x">
@@ -136,7 +141,11 @@ export default {
             </div>
             <button class="btn text-black fw-bold" type="submit">Invia</button>
           </form>
+          <div v-if="loading">Sto inviando</div>
         </div>
+        <div class="my-3" v-if="!loading && messageSend">
+        Recensione inviata correttamente
+      </div>
       </div>
       <h5 class="text-center">Recensioni</h5>
       <div class="reviews-container" v-if="reviews.length">
