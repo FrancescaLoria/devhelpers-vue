@@ -81,10 +81,13 @@ export default {
       //   console.log(this.developers);
 
       this.loading = true
-      axios.get(`${this.store.apiUrl}/api/developers/${this.idsString} `, {params}).then((resp) => {
+      axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString, {params}).then((resp) => {
         console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
         // console.log("Resp.data.results", resp);
         this.developers = (resp.data.results);
+        
+        this.lastPage = resp.data.results.last_page
+        this.currentPage = resp.data.results.current_page;
         console.log(this.developersByComment);
         console.log(this.developersByVote);
         console.log("developers per tecnologia", this.developers);
@@ -239,7 +242,7 @@ export default {
           <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
             <DeveloperCard :developer="developer" />
           </div> -->
-          <div class="col" v-for="developer in filteredDevelopers" :key="developer.id">
+          <div class="col" v-for="developer,index in filteredDevelopers" :key="index">
             <DeveloperCard :developer="developer" />
           </div>
         </div>
@@ -254,11 +257,11 @@ export default {
   <nav v-if="lastPage" class="d-flex justify-content-center my-3" aria-label="Page navigation">
             <ul class="pagination">
                 <li class="page-item" :class="{ 'disabled': currentPage === 1 }"><a
-                        @click.prevent="getDevelopers(currentPage - 1)" class="page-link" href="#">Previous</a></li>
-                <li v-for="DevNumber in lastPage" @click.prevent="getDevelopers(DevNumber)"
-                    :class="{ 'active': projectNumber === currentPage }" class="page-item"><a class="page-link" href=""></a></li>
+                        @click.prevent="getDevelopers('',currentPage - 1)" class="page-link" href="#">Previous</a></li>
+                <li v-for="DevNumber in lastPage" @click.prevent="getDevelopers('',DevNumber)"
+                    :class="{ 'active': DevNumber === currentPage }" class="page-item"><a class="page-link" href="#"></a></li>
                 <li class="page-item" :class="{ 'disabled': currentPage === lastPage }"><a
-                        @click.prevent="getDevelopers(currentPage + 1)" class="page-link" href="#">Next</a></li>
+                        @click.prevent="getDevelopers('',currentPage + 1)" class="page-link" href="#">Next</a></li>
             </ul>
         </nav>
   
