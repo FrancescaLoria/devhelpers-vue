@@ -5,12 +5,14 @@ import DeveloperCard from "./DeveloperCard.vue";
 import Filters from './Filters.vue';
 import filterComment from './filterComment.vue';
 
+
 export default {
   name: "SearchBar",
   components: {
     DeveloperCard,
     Filters,
-    filterComment
+    filterComment,
+    
   },
   data() {
     return {
@@ -22,35 +24,59 @@ export default {
       idsString: "",  // Sringa con id collegati con &
       developersByComment: [], // Developers filtrati in base al numero di recensioni (>=)
 
+      pageNumber: 1,
+      currentPage: 1,
+      lastPage: null,
+      totalDevelopers: 0,
+
     };
   },
   mounted() {
+
     this.getTechnology();
-    this.getDeveloper(parseInt(this.$route.params.id));
+    if (this.$route.params.id)
+    this.getDeveloper();
+    
   },
   methods: {
     // Prendi le tecnologie
     getTechnology() {
       axios.get(`${this.store.apiUrl}/api/technologies`).then((resp) => {
+        console.log(resp);
         this.technologies = resp.data.results;
       });
     },
     // Prendi i developer
-    getDeveloper(id) {
+    getDeveloper(id,page) {
+      let params ;
+     
       if (this.ids.includes(id)) {
         const index = this.ids.indexOf(id);
         this.ids.splice(index, 1);
       } else {
         this.ids.push(id);
       }
-
       this.idsString = this.ids.join('&');
+      if (page != 0) {
+        params = {
+          page : page,
+          // idsString
+        }
+      }
+      
 
-      axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString).then((resp) => {
-        console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
+     
+      axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString, { params }).then((resp) => {
+        console.log(resp);
+    
+        // console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
         // console.log("Resp.data.results", resp);
         this.developers = (resp.data.results);
+        this.currentPage = resp.data.results.current_page;
+        this.lastPage = resp.data.results.last_page;
+        this.totalDevelopers = resp.data.results.total;
         console.log(this.developers);
+
       })
     },
     // Filtra per voti
@@ -118,7 +144,7 @@ export default {
 
   <div class="container">
     <h1 class="title text-center my-4 fw-bold">I nostri programmatori</h1> -->
- 
+
 
 
 
@@ -127,16 +153,18 @@ export default {
       <h3 class="title text-center my-4 fw-bold">Scegli i linguaggi che ti interressano</h3>
 
       <div class="row p-4 justify-content-between">
-        <div class="pretty p-icon p-round p-tada col-md-3 mb-2 fs-5 " v-for="technology in technologies" :key="technology.id">
-        <input :checked="technology.id == this.$route.params.id" @change="getDeveloper(technology.id)" id="technology" type="checkbox" :value="technology.id" />
-        <div class="state p-success">
-          <!-- <i class="icon fa-regular fa-heart"></i> -->
-          <i class="icon fa-solid fa-heart"></i>
-    
-          <label for="technologies">{{ technology.name }}</label>
+        <div class="pretty p-icon p-round p-tada col-md-3 mb-2 fs-5 " v-for="technology in technologies"
+          :key="technology.id">
+          <input :checked="technology.id == this.$route.params.id" @change="getDeveloper(technology.id)" id="technology"
+            type="checkbox" :value="technology.id" />
+          <div class="state p-success">
+            <!-- <i class="icon fa-regular fa-heart"></i> -->
+            <i class="icon fa-solid fa-heart"></i>
+
+            <label for="technologies">{{ technology.name }}</label>
+          </div>
         </div>
-      </div>
-  
+
       </div>
     </div>
     <h3 class="title text-center my-4 fw-bold">Fai una ricerca avanzata:</h3>
@@ -151,9 +179,10 @@ export default {
   <div class="dev-space">
 
     <div class="container p-4">
-  
-      <div  v-if="filteredDevelopers.length !== 0">
-    
+
+      <div v-if="filteredDevelopers.length !== 0">
+        <!-- <router-link :to="{ name: 'single-project', params: { slug: project.slug } }" class="btn btn-info">More info</router-link> -->
+
         <div class="row ">
           <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
             <DeveloperCard :developer="developer" />
@@ -168,6 +197,21 @@ export default {
       </div>
     </div>
   </div>
+
+  <!-- pagination -->
+  <nav v-if="lastPage" class="d-flex justify-content-center my-3" aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item" :class="{ 'disabled': currentPage === 1 }"><a
+                        @click.prevent="getDevelopers(currentPage - 1)" class="page-link" href="#">Previous</a></li>
+                <li v-for="DevNumber in lastPage" @click.prevent="getDevelopers(DevNumber)"
+                    :class="{ 'active': projectNumber === currentPage }" class="page-item"><a class="page-link" href="#">{{
+                         }}</a></li>
+                <li class="page-item" :class="{ 'disabled': currentPage === lastPage }"><a
+                        @click.prevent="getDevelopers(currentPage + 1)" class="page-link" href="#">Next</a></li>
+            </ul>
+        </nav>
+<!--   
+  <Pagination :currentPage="currentPage" :lastPage="lastPage" @changePage="getDevelopers" /> -->
 </template>
 
 <style lang="scss" scoped>
@@ -176,13 +220,15 @@ export default {
 .title {
   color: $dark-green;
 }
+
 .ms-container {
   width: 80%;
   margin: 0 auto;
 
- 
+
 }
- .dev-space {
-    background-color: $light-green;
-  }
+
+.dev-space {
+  background-color: $light-green;
+}
 </style>
