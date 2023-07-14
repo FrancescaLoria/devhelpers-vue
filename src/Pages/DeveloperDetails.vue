@@ -96,7 +96,7 @@ export default {
                 <div class="technologies">
                   <h4>Tecnologie</h4>
                   <ul>
-                    <li v-for="technology in developer.technologies">
+                    <li v-for="technology,index in developer.technologies" :key="index">
                       {{ technology.name }}
                     </li>
                   </ul>
@@ -121,7 +121,7 @@ export default {
             </div>
             <div class="vote my-3">Voto</div>
             <div class="container-radio d-flex gap-2">
-              <div class="form-check" v-for="x in 5">
+              <div class="form-check" v-for="x,index in 5" :key="index">
                 <input required class="form-check-input" name="vote-radio" type="radio" v-model="vote" :value="x"
                   :id="'flexRadioDefault' + x">
                 <label class="form-check-label" :for="'flexRadioDefault' + x">
