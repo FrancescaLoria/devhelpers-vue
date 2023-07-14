@@ -13,7 +13,9 @@ export default {
       name: '',
       vote: '',
       comment: '',
-      reviews: []
+      reviews: [],
+      loading: false,
+      messageSend: false,
     };
   },
   mounted() {
@@ -43,6 +45,7 @@ export default {
     },
 
     getPostReview() {
+      this.loading = true
       const data = {
         name: this.name,
         vote: this.vote,
@@ -58,9 +61,11 @@ export default {
         // Chiamata per recuperare le recensioni di uno sviluppatore
         // Eseguo la chiamata per recuperare le recensioni dopo averne salvata una, per evitare il ricaricamento della pagina prima di poterle vedere
         this.retrieveDeveloperReview()
+      }).finally(() => {
+        this.loading = false
       })
 
-
+      this.messageSend = true
 
 
     }
@@ -136,7 +141,11 @@ export default {
             </div>
             <button class="btn text-black fw-bold" type="submit">Invia</button>
           </form>
+          <div v-if="loading">Sto inviando</div>
         </div>
+        <div class="my-3" v-if="!loading && messageSend">
+        Recensione inviata correttamente
+      </div>
       </div>
       <h5 class="text-center">Recensioni</h5>
       <div class="reviews-container" v-if="reviews.length">
