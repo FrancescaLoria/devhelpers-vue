@@ -20,7 +20,8 @@ export default {
       developersByVote: [], // Developers filtrati in base alla media voto (>=)
       ids: [],  // Array di id
       idsString: "",  // Sringa con id collegati con &
-      developersByComment: [], // Developers filtrati in base al numero di recensioni (>=)
+      developersByComment: [],
+      loading: false // Developers filtrati in base al numero di recensioni (>=)
 
     };
   },
@@ -43,14 +44,17 @@ export default {
       } else {
         this.ids.push(id);
       }
-
+      
       this.idsString = this.ids.join('&');
-
+      
+      this.loading = true
       axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString).then((resp) => {
         console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
         // console.log("Resp.data.results", resp);
         this.developers = (resp.data.results);
         console.log("developers per tecnologia", this.developers);
+      }).finally(() => {
+        this.loading = false
       })
     },
     // Filtra per voti
@@ -194,13 +198,14 @@ export default {
     <div class="container p-4">
   
       <div  v-if="filteredDevelopers.length !== 0">
-    
-        <div class="row ">
+        
+        <div class="text-center text-white" v-if="loading">Caricamento ...</div>
+        <div class="row " v-if="!loading">
           <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
             <DeveloperCard :developer="developer" />
           </div> -->
           <div class="col" v-for="developer in filteredDevelopers" :key="developer.id">
-            <DeveloperCard :developer="developer" />
+            <DeveloperCard :developer="developer"/>
           </div>
         </div>
       </div>

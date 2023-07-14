@@ -10,7 +10,8 @@ export default {
       surname: "",
       email: "",
       request: "",
-      messageSend: false
+      messageSend: false,
+      loading: false,
     };
   },
   methods: {
@@ -23,6 +24,7 @@ export default {
       });
     },
     getMessage() {
+      this.loading = true;
       const id = this.$route.params.id;
       const data = {
         name: this.name,
@@ -31,14 +33,19 @@ export default {
         request: this.request,
         user_id: id,
       };
-      axios.post(`${store.apiUrl}/api/messages`, data).then((resp) => {
-        console.log(resp);
-        this.name = '',
-        this.surname = '',
-        this.email = '',
-        this.request = ''
-      });
-      this.messageSend = true
+      axios
+        .post(`${store.apiUrl}/api/messages`, data)
+        .then((resp) => {
+          console.log(resp);
+          (this.name = ""),
+            (this.surname = ""),
+            (this.email = ""),
+            (this.request = "");
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+      this.messageSend = true;
     },
   },
 };
@@ -83,6 +90,7 @@ export default {
                 class="form-control"
                 id="name"
                 v-model="name"
+                required
               />
             </div>
             <div class="mb-3">
@@ -92,6 +100,7 @@ export default {
                 class="form-control"
                 id="surname"
                 v-model="surname"
+                required
               />
             </div>
             <div class="mb-3">
@@ -101,6 +110,7 @@ export default {
                 class="form-control"
                 id="request"
                 v-model="email"
+                required
               />
             </div>
             <div class="mb-3">
@@ -110,6 +120,7 @@ export default {
               <textarea
                 class="form-control"
                 id="message"
+                required
                 v-model="request"
               ></textarea>
             </div>
@@ -125,9 +136,12 @@ export default {
                 Invia messaggio
               </button>
             </div>
-        </form>
-    </div>
-    <div class="my-3" v-if="messageSend">Messaggio inviato correttamente</div>
+          </form>
+          <div v-if="loading">Sto inviando ...</div>
+        </div>
+        <div class="my-3" v-if="!loading && messageSend">
+          Messaggio inviato correttamente
+        </div>
       </div>
     </div>
   </div>
