@@ -24,7 +24,7 @@ export default {
             </ul>
             <button type="button" class="btn">
                 <router-link :to="{ name: 'developerDetails', params: { id: developer.id } }"
-                    class=" card-link">Details</router-link>
+                    class=" card-link">Dai un'occhiata</router-link>
             </button>
 
 
