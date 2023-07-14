@@ -93,7 +93,7 @@ export default {
       let filteredDevelopers = [];
       // Entrambi i filtri attivi
       if (this.developersByVote != '' && this.developersByComment != '') {
-        if (this.idsString == '' && store.selectedVote == '' && store.selctedComment == '') {
+        if (this.idsString == '' && store.selectedVote == '' && store.selectedComment == '') {
           filteredDevelopers = this.developers;
         } else {
           let tempDev = [];
