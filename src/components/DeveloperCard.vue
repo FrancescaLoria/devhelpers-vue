@@ -120,7 +120,6 @@ export default {
     .btn {
         background-color: $pink;
         color: $light-green;
-        width: 20%;
         margin: 0 auto;
 
         a {
