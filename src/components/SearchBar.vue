@@ -58,15 +58,17 @@ export default {
         this.ids.push(id);
       }
       this.idsString = this.ids.join('&');
+
       if (page != 0) {
         params = {
           page : page,
+     
           // idsString
         }
       }
       
 
-     
+     //////////PAGINATION//////////
       // axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString, { params }).then((resp) => {
       //   console.log(resp);
     
@@ -79,7 +81,7 @@ export default {
       //   console.log(this.developers);
 
       this.loading = true
-      axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString).then((resp) => {
+      axios.get(`${this.store.apiUrl}/api/developers/${this.idsString} `, {params}).then((resp) => {
         console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
         // console.log("Resp.data.results", resp);
         this.developers = (resp.data.results);
@@ -254,14 +256,13 @@ export default {
                 <li class="page-item" :class="{ 'disabled': currentPage === 1 }"><a
                         @click.prevent="getDevelopers(currentPage - 1)" class="page-link" href="#">Previous</a></li>
                 <li v-for="DevNumber in lastPage" @click.prevent="getDevelopers(DevNumber)"
-                    :class="{ 'active': projectNumber === currentPage }" class="page-item"><a class="page-link" href="#">{{
-                         }}</a></li>
+                    :class="{ 'active': projectNumber === currentPage }" class="page-item"><a class="page-link" href=""></a></li>
                 <li class="page-item" :class="{ 'disabled': currentPage === lastPage }"><a
                         @click.prevent="getDevelopers(currentPage + 1)" class="page-link" href="#">Next</a></li>
             </ul>
         </nav>
-<!--   
-  <Pagination :currentPage="currentPage" :lastPage="lastPage" @changePage="getDevelopers" /> -->
+  
+  <!-- <Pagination :currentPage="currentPage" :lastPage="lastPage" @changePage="getDevelopers" /> -->
 </template>
 
 <style lang="scss" scoped>
