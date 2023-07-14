@@ -44,14 +44,16 @@ export default {
       } else {
         this.ids.push(id);
       }
-      
+
       this.idsString = this.ids.join('&');
-      
+
       this.loading = true
       axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString).then((resp) => {
         console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
         // console.log("Resp.data.results", resp);
         this.developers = (resp.data.results);
+        console.log(this.developersByComment);
+        console.log(this.developersByVote);
         console.log("developers per tecnologia", this.developers);
       }).finally(() => {
         this.loading = false
@@ -88,29 +90,36 @@ export default {
   computed: {
     // Filtro sui developer
     filteredDevelopers() {
-      // Non funziona bene
       let filteredDevelopers = [];
+      // Entrambi i filtri attivi
       if (this.developersByVote != '' && this.developersByComment != '') {
-        this.developersByVote.forEach(elem => {
-          console.log(elem);
-          this.developersByComment.forEach(comment => {
-            console.log(comment);
-            this.developers.forEach(dev => {
-              console.log(comment);
-              if (elem.id === comment.id === dev.id) {
-                filteredDevelopers.push(dev);
-              }
-              console.log("Filtrati", filteredDevelopers);
+        if (this.idsString == '' && store.selectedVote == '' && store.selectedComment == '') {
+          filteredDevelopers = this.developers;
+        } else {
+          let tempDev = [];
 
-              // this.developersByComment.forEach(comment => {
-              // })
+          this.developersByVote.forEach(elem => {
+            this.developers.forEach((dev) => {
+              if (dev.id === elem.id) {
+                tempDev.push(dev);
+              }
+            })
+          });
+
+          this.developersByComment.forEach(comment => {
+            tempDev.forEach(temp => {
+              if (comment.id === temp.id) {
+                filteredDevelopers.push(temp);
+              }
             })
           })
-        });
+        }
+
+        // Entrambi i filtri NON attivi
       } else if (this.developersByVote == '' && this.developersByComment == '') {
-        console.log(this.developersByComment);
-        console.log(this.developersByVote);
+        // console.log("è tutto vuoto");
         filteredDevelopers = this.developers;
+        // Filtro per recensioni attivo
       } else if (this.developersByComment != '') {
         if (this.idsString != '') {
           this.developersByComment.forEach(comment => {
@@ -123,28 +132,19 @@ export default {
         } else {
           filteredDevelopers = this.developersByComment;
         }
-        console.log("Filtrati", filteredDevelopers);
-        // this.developersByComment = '';
-        // return filteredDevelopers;
+        // Filtro per voti attivo
       } else if (this.developersByVote != '') {
-        console.log("ids", this.ids);
-        console.log("idsString", this.idsString);
-
         if (this.idsString != '') {
           this.developersByVote.forEach(elem => {
             this.developers.forEach(dev => {
               if (dev.id === elem.id) {
                 filteredDevelopers.push(dev);
               }
-              // this.developersByComment.forEach(comment => {
-              // })
             })
           });
         } else {
           filteredDevelopers = this.developersByVote;
         }
-        console.log("Filtrati", filteredDevelopers);
-        // this.developersByVote = '';
       }
       return filteredDevelopers;
     }
@@ -163,7 +163,7 @@ export default {
 
   <div class="container">
     <h1 class="title text-center my-4 fw-bold">I nostri programmatori</h1> -->
- 
+
 
 
 
@@ -172,16 +172,18 @@ export default {
       <h3 class="title text-center my-4 fw-bold">Scegli i linguaggi che ti interressano</h3>
 
       <div class="row p-4 justify-content-between">
-        <div class="pretty p-icon p-round p-tada col-md-3 mb-2 fs-5 " v-for="technology in technologies" :key="technology.id">
-        <input :checked="technology.id == this.$route.params.id" @change="getDeveloper(technology.id)" id="technology" type="checkbox" :value="technology.id" />
-        <div class="state p-success">
-          <!-- <i class="icon fa-regular fa-heart"></i> -->
-          <i class="icon fa-solid fa-heart"></i>
-    
-          <label for="technologies">{{ technology.name }}</label>
+        <div class="pretty p-icon p-round p-tada col-md-3 mb-2 fs-5 " v-for="technology in technologies"
+          :key="technology.id">
+          <input :checked="technology.id == this.$route.params.id" @change="getDeveloper(technology.id)" id="technology"
+            type="checkbox" :value="technology.id" />
+          <div class="state p-success">
+            <!-- <i class="icon fa-regular fa-heart"></i> -->
+            <i class="icon fa-solid fa-heart"></i>
+
+            <label for="technologies">{{ technology.name }}</label>
+          </div>
         </div>
-      </div>
-  
+
       </div>
     </div>
     <h3 class="title text-center my-4 fw-bold">Fai una ricerca avanzata:</h3>
@@ -196,16 +198,16 @@ export default {
   <div class="dev-space">
 
     <div class="container p-4">
-  
-      <div  v-if="filteredDevelopers.length !== 0">
-        
+
+      <div v-if="filteredDevelopers.length !== 0">
+
         <div class="text-center text-white" v-if="loading">Caricamento ...</div>
         <div class="row " v-if="!loading">
           <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
             <DeveloperCard :developer="developer" />
           </div> -->
           <div class="col" v-for="developer in filteredDevelopers" :key="developer.id">
-            <DeveloperCard :developer="developer"/>
+            <DeveloperCard :developer="developer" />
           </div>
         </div>
       </div>
@@ -222,13 +224,15 @@ export default {
 .title {
   color: $dark-green;
 }
+
 .ms-container {
   width: 80%;
   margin: 0 auto;
 
- 
+
 }
- .dev-space {
-    background-color: $light-green;
-  }
+
+.dev-space {
+  background-color: $light-green;
+}
 </style>
