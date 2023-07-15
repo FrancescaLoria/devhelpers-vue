@@ -202,7 +202,7 @@ export default {
       <div v-if="filteredDevelopers.length !== 0">
 
         <div class="text-center text-white" v-if="loading">Caricamento ...</div>
-        <div class="row " v-if="!loading">
+        <div class="row flex-column" v-if="!loading">
           <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
             <DeveloperCard :developer="developer" />
           </div> -->
@@ -225,12 +225,7 @@ export default {
   color: $dark-green;
 }
 
-.ms-container {
-  width: 80%;
-  margin: 0 auto;
 
-
-}
 
 .dev-space {
   background-color: $light-green;

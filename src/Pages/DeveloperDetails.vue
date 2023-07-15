@@ -88,18 +88,18 @@ export default {
           <div class="card">
             <div class="text">
               <div class="info">
-                <div class="email">EMAIL: {{ developer.email }}</div>
-                <div class="addres">INDIRIZZO: {{ developer.address }}</div>
-                <div class="github">GITHUB: {{ developer.github }}</div>
-                <div class="phone">TELEFONO: {{ developer.phone }}</div>
-                <div class="description">
-                  DESCRIZIONE: {{ developer.description }}
+                <div class="email"><span class="fw-bold">EMAIL:</span>  {{ developer.email }}</div>
+                <div class="addres"><span class="fw-bold">INDIRIZZO:</span> {{ developer.address }}</div>
+                <div class="github"><span class="fw-bold">GITHUB:</span> {{ developer.github }}</div>
+                <div class="phone"><span class="fw-bold">TELEFONO:</span> {{ developer.phone }}</div>
+                <div class="description"><span class="fw-bold">DESCRIZIONE:</span>
+                   {{ developer.description }}
                 </div>
-                <div class="skills">ABILITA': {{ developer.skills }}</div>
+                <div class="skills"><span class="fw-bold">ABILITA':</span> {{ developer.skills }}</div>
               </div>
               <div class="tecnologie">
                 <div class="technologies">
-                  <h4>Tecnologie</h4>
+                  <h4>TECNOLOGIE</h4>
                   <ul>
                     <li v-for="technology,index in developer.technologies" :key="index">
                       {{ technology.name }}

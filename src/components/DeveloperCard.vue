@@ -34,17 +34,20 @@ export default {
             </div>
         </div>
     </div> -->
-    <div class="container ms_container">
+    
         <div class="col">
             <div class="card developer-card">
                 <div class="cont-card">
-                    <div class="container-image ">
-                        <!-- SEZIONE IMMAGINE -->
-                        <div class="container-img">
-                            <img v-if="developer.photo" :src="`${store.apiUrl}/storage/${developer.photo}`" alt="">
-                            <img v-else src="../assets/image/webdeveloper.jpg" alt="">
-                        </div>
+                    <div class="left-container">
 
+                        <div class="container-image ">
+                            <!-- SEZIONE IMMAGINE -->
+                            <div class="container-img">
+                                <img v-if="developer.photo" :src="`${store.apiUrl}/storage/${developer.photo}`" alt="">
+                                <img v-else src="../assets/image/webdeveloper.jpg" alt="">
+                            </div>
+    
+                        </div>
                     </div>
 
                     <div class="name-vote-tech">
@@ -56,7 +59,7 @@ export default {
                         <div class="container-media text-center ">
                             <!-- SEZIONE MEDIA VOTO E RECENSIONE -->
                             <div class="vote fst-italic fw-bold">MEDIA VOTO : 
-                                <span class="text-primary fw-bold" v-for="elem,id in developer.avg_vote" :key="id">
+                                <span v-for="vote,id in developer.avg_vote" :key="id">
                                     <i class="fa-solid fa-star" style="color: rgb(239, 205, 37);"></i>
                                 </span>
                             </div>
@@ -69,7 +72,7 @@ export default {
                         <!-- SEZIONE TECNOLOGIE -->
                         <div class="tech text-center my-2">
                             <h4>TECNOLOGIE</h4>
-                            <div class="cards-container d-flex gap-2 justify-content-center fst-italic fw-bold">
+                            <div class="cards-container d-flex flex-wrap gap-2 justify-content-center fst-italic fw-bold">
                                 <div class="card-text" v-for="item, index in developer.technologies" :key="index">
                                     <div>{{ item.name }}</div>
                                 </div>
@@ -77,17 +80,22 @@ export default {
 
                         </div>
                     </div>
+
+
+                    <!-- BOTTONE -->
+                    <div class="cont-btn text-center">
+
+                        <button type="button" class="btn fw-bold text-dark my-2">
+                            <router-link :to="{ name: 'developerDetails', params: { id: developer.id } }"
+                                class=" card-link">DETAILS</router-link>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- BOTTONE -->
-                <button type="button" class="btn fw-bold my-2">
-                    <router-link :to="{ name: 'developerDetails', params: { id: developer.id } }"
-                        class=" card-link">DETAILS</router-link>
-                </button>
 
             </div>
         </div>
-    </div>
+   
 </template>
 
 <style lang="scss" scoped>
@@ -139,12 +147,34 @@ export default {
         align-items: center;
         justify-content: space-evenly;
     }
+    .left-container {
+    width: 30%;
+    padding: 10px;
+   }
+   .name-vote-tech {
+    width: 50%;
+    padding: 10px;
 
+   }
+.cont-btn {
+    width: 20%;
+    padding: 10px;
+}
 }
 
 @media screen and (min-width: 992px) {
-    .developer-card {
-        max-width: 700px;
-    }
+    .left-container {
+    width: 25%;
+    padding: 10px;
+   }
+   .name-vote-tech {
+    width: 50%;
+    padding: 10px;
+
+   }
+.cont-btn {
+    width: 25%;
+    padding: 10px;
+}
 }
 </style>
