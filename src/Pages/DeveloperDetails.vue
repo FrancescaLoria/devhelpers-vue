@@ -75,7 +75,9 @@ export default {
 
 <template>
   <div class="details">
+
     <div class="container">
+      <button class="btn fw-bold text-black mb-2" @click="$router.go(-1)">INDIETRO</button>
       <div class="ms_container py-3">
         <h1 class="text-center developer-name">
           {{ `${developer.name} ${developer.surname}` }}
@@ -88,12 +90,12 @@ export default {
           <div class="card">
             <div class="text">
               <div class="info">
-                <div class="email"><span class="fw-bold">EMAIL:</span>  {{ developer.email }}</div>
+                <div class="email"><span class="fw-bold">EMAIL:</span> {{ developer.email }}</div>
                 <div class="addres"><span class="fw-bold">INDIRIZZO:</span> {{ developer.address }}</div>
                 <div class="github"><span class="fw-bold">GITHUB:</span> {{ developer.github }}</div>
                 <div class="phone"><span class="fw-bold">TELEFONO:</span> {{ developer.phone }}</div>
                 <div class="description"><span class="fw-bold">DESCRIZIONE:</span>
-                   {{ developer.description }}
+                  {{ developer.description }}
                 </div>
                 <div class="skills"><span class="fw-bold">ABILITA':</span> {{ developer.skills }}</div>
               </div>
@@ -101,7 +103,7 @@ export default {
                 <div class="technologies">
                   <h4>TECNOLOGIE</h4>
                   <ul>
-                    <li v-for="technology,index in developer.technologies" :key="index">
+                    <li v-for="technology, index in developer.technologies" :key="index">
                       {{ technology.name }}
                     </li>
                   </ul>
@@ -126,7 +128,7 @@ export default {
             </div>
             <div class="vote my-3">Voto</div>
             <div class="container-radio d-flex gap-2">
-              <div class="form-check" v-for="x,index in 5" :key="index">
+              <div class="form-check" v-for="x, index in 5" :key="index">
                 <input required class="form-check-input" name="vote-radio" type="radio" v-model="vote" :value="x"
                   :id="'flexRadioDefault' + x">
                 <label class="form-check-label" :for="'flexRadioDefault' + x">
@@ -144,8 +146,8 @@ export default {
           <div v-if="loading">Sto inviando</div>
         </div>
         <div class="my-3" v-if="!loading && messageSend">
-        Recensione inviata correttamente
-      </div>
+          Recensione inviata correttamente
+        </div>
       </div>
       <h5 class="text-center">Recensioni</h5>
       <div class="reviews-container" v-if="reviews.length">

@@ -168,6 +168,7 @@ export default {
 
 
   <div class="container">
+
     <div class="ms-container">
       <h3 class="title text-center my-4 fw-bold">Scegli i linguaggi che ti interressano</h3>
 
@@ -215,6 +216,8 @@ export default {
 
 <style lang="scss" scoped>
 @use "../styles/partials/variables" as *;
+
+
 
 .title {
   color: $dark-green;
