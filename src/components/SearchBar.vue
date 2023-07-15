@@ -202,13 +202,8 @@ export default {
       <div v-if="filteredDevelopers.length !== 0">
 
         <div class="text-center text-white" v-if="loading">Caricamento ...</div>
-        <div class="row flex-column" v-if="!loading">
-          <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
-            <DeveloperCard :developer="developer" />
-          </div> -->
-          <div class="col" v-for="developer in filteredDevelopers" :key="developer.id">
-            <DeveloperCard :developer="developer" />
-          </div>
+        <div class="row" v-if="!loading">
+          <DeveloperCard v-for="developer in filteredDevelopers" :key="developer.id" :developer="developer" />
         </div>
       </div>
       <div v-else>
