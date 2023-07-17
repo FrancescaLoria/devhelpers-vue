@@ -77,7 +77,7 @@ export default {
                 class=" card-link">DETAILS</router-link>
         </button>
     </div>
-</div></template>
+</template>
 
 <style lang="scss" scoped>
 @use "../styles/partials/variables" as *;
