@@ -1,5 +1,4 @@
 <script>
-import axios from 'axios';
 import { store } from "../store"
 export default {
     name: 'DeveloperCard',
@@ -15,77 +14,58 @@ export default {
 </script>
 
 <template>
-    <!-- <div class="card developer-card text-center" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">{{ developer.name }}</h5>
-            <h6 class="card-subtitle mb-2 text-body-secondary">{{ developer.surname }}</h6>
-            <ul class="card-text" v-for="item, index in developer.technologies" :key="index">
-                <li>{{ item.name }}</li>
-            </ul>
-            <button type="button" class="btn">
-                <router-link :to="{ name: 'developerDetails', params: { id: developer.id } }"
-                    class=" card-link">Dai un'occhiata</router-link>
-            </button>
+    <div class="card developer-card">
+        <div class="left-container">
 
+            <div class="container-image ">
+                <!-- SEZIONE IMMAGINE -->
+                <div class="container-img">
+                    <img v-if="developer.photo" :src="`${store.apiUrl}/storage/${developer.photo}`" alt="">
+                    <img v-else src="../assets/image/webdeveloper.jpg" alt="">
+                </div>
 
-            <div class="container-img">
-                <img v-if="developer.photo" :src="`${store.apiUrl}/storage/${developer.photo}`" alt="">
-                <img v-else src="../assets/image/webdeveloper.jpg" alt="">
             </div>
         </div>
-    </div> -->
-    <div class="container ms_container">
-        <div class="col">
-            <div class="card developer-card">
-                <div class="cont-card">
-                    <div class="container-image ">
-                        <!-- SEZIONE IMMAGINE -->
-                        <div class="container-img">
-                            <img v-if="developer.photo" :src="`${store.apiUrl}/storage/${developer.photo}`" alt="">
-                            <img v-else src="../assets/image/webdeveloper.jpg" alt="">
-                        </div>
 
-                    </div>
-
-                    <div class="name-vote-tech">
-                        <div class="container-name d-flex justify-content-center">
-                            <!-- SEZIONE NOME -->
-                            <h2 class="title">{{ developer.name }}</h2>
-                            <h2 class="subtitle ms-1">{{ developer.surname }}</h2>
-                        </div>
-                        <div class="container-media text-center ">
-                            <!-- SEZIONE MEDIA VOTO E RECENSIONE -->
-                            <div class="vote fst-italic fw-bold">MEDIA VOTO : 
-                                <span v-for="vote,id in developer.avg_vote" :key="id">
-                                    <i class="fa-solid fa-star" style="color: rgb(239, 205, 37);"></i>
-                                </span>
-                            </div>
-                            <div class="review fst-italic fw-bold">NUMERO RECENSIONI : <span class="text-primary fw-bold">{{
-                                developer.total_review }}</span></div>
-                        </div>
+        <div class="name-vote-tech">
+            <div class="container-name d-flex justify-content-center">
+                <!-- SEZIONE NOME -->
+                <h2 class="title">{{ developer.name }}</h2>
+                <h2 class="subtitle ms-1">{{ developer.surname }}</h2>
+            </div>
+            <div class="container-media text-center ">
+                <!-- SEZIONE MEDIA VOTO E RECENSIONE -->
+                <div class="vote fst-italic fw-bold">MEDIA VOTO :
+                    <span v-for="vote, id in developer.average_vote" :key="id">
+                        <i class="fa-solid fa-star" style="color: rgb(239, 205, 37);"></i>
+                    </span>
+                </div>
+                <div class="review fst-italic fw-bold">NUMERO RECENSIONI : <span class="text-primary fw-bold">{{
+                    developer.total_review }}</span></div>
+            </div>
 
 
 
-                        <!-- SEZIONE TECNOLOGIE -->
-                        <div class="tech text-center my-2">
-                            <h4>TECNOLOGIE</h4>
-                            <div class="cards-container d-flex gap-2 justify-content-center fst-italic fw-bold">
-                                <div class="card-text" v-for="item, index in developer.technologies" :key="index">
-                                    <div>{{ item.name }}</div>
-                                </div>
-                            </div>
-
-                        </div>
+            <!-- SEZIONE TECNOLOGIE -->
+            <div class="tech text-center my-2">
+                <h4>TECNOLOGIE</h4>
+                <div class="cards-container d-flex flex-wrap gap-2 justify-content-center fst-italic fw-bold">
+                    <div class="card-text" v-for="item, index in developer.technologies" :key="index">
+                        <div>{{ item.name }}</div>
                     </div>
                 </div>
 
-                <!-- BOTTONE -->
-                <button type="button" class="btn fw-bold my-2">
-                    <router-link :to="{ name: 'developerDetails', params: { id: developer.id } }"
-                        class=" card-link">DETAILS</router-link>
-                </button>
-
             </div>
+        </div>
+
+
+        <!-- BOTTONE -->
+        <div class="cont-btn text-center">
+
+            <button type="button" class="btn fw-bold text-dark my-2">
+                <router-link :to="{ name: 'developerDetails', params: { id: developer.id } }"
+                    class=" card-link">DETTAGLI</router-link>
+            </button>
         </div>
     </div>
 </template>
@@ -94,12 +74,11 @@ export default {
 @use "../styles/partials/variables" as *;
 
 .developer-card {
-    margin: 50px auto 20px;
-    padding-top: 30px;
-    padding-bottom: 30px;
+    width: 100%;
+    margin: 30px auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
     border-radius: 20px;
-
-
 
     .container-img {
         width: 150px;
@@ -117,8 +96,6 @@ export default {
         }
     }
 
-
-
     .btn {
         background-color: $pink;
         color: $light-green;
@@ -133,18 +110,16 @@ export default {
 }
 
 @media screen and (min-width: 768px) {
-    .cont-card {
-        display: flex;
+    .developer-card {
         flex-direction: row;
+        justify-content: space-between;
         align-items: center;
-        justify-content: space-evenly;
     }
-
 }
 
-@media screen and (min-width: 992px) {
+@media screen and (min-width: 1400px) {
     .developer-card {
-        max-width: 700px;
+        width: 45%;
     }
 }
 </style>

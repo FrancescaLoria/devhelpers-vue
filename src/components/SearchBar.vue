@@ -241,6 +241,7 @@ export default {
 
 
   <div class="container">
+
     <div class="ms-container">
       <h3 class="title text-center my-4 fw-bold">Scegli i linguaggi che ti interressano</h3>
 
@@ -275,13 +276,8 @@ export default {
       <div v-if="filteredDevelopers.length !== 0">
 
         <div class="text-center text-white" v-if="loading">Caricamento ...</div>
-        <div class="row " v-if="!loading">
-          <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
-            <DeveloperCard :developer="developer" />
-          </div> -->
-          <div class="col" v-for="developer, index in filteredDevelopers" :key="index">
-            <DeveloperCard :developer="developer" />
-          </div>
+        <div class="row" v-if="!loading">
+          <DeveloperCard v-for="developer in filteredDevelopers" :key="developer.id" :developer="developer" />
         </div>
       </div>
       <div v-else>
@@ -309,16 +305,13 @@ export default {
 <style lang="scss" scoped>
 @use "../styles/partials/variables" as *;
 
+
+
 .title {
   color: $dark-green;
 }
 
-.ms-container {
-  width: 80%;
-  margin: 0 auto;
 
-
-}
 
 .dev-space {
   background-color: $light-green;

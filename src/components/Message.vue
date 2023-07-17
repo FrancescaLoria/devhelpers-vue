@@ -132,7 +132,7 @@ export default {
               >
                 Annulla
               </button>
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn">
                 Invia messaggio
               </button>
             </div>
@@ -146,3 +146,5 @@ export default {
     </div>
   </div>
 </template>
+
+

@@ -75,7 +75,9 @@ export default {
 
 <template>
   <div class="details">
+
     <div class="container">
+      <button class="btn fw-bold text-black mb-2" @click="$router.go(-1)">INDIETRO</button>
       <div class="ms_container py-3">
         <h1 class="text-center developer-name">
           {{ `${developer.name} ${developer.surname}` }}
@@ -88,12 +90,12 @@ export default {
           <div class="card">
             <div class="text">
               <div class="info">
-                <div class="email"><span class="fw-bold">EMAIL:</span>  {{ developer.email }}</div>
+                <div class="email"><span class="fw-bold">EMAIL:</span> {{ developer.email }}</div>
                 <div class="addres"><span class="fw-bold">INDIRIZZO:</span> {{ developer.address }}</div>
                 <div class="github"><span class="fw-bold">GITHUB:</span> {{ developer.github }}</div>
                 <div class="phone"><span class="fw-bold">TELEFONO:</span> {{ developer.phone }}</div>
                 <div class="description"><span class="fw-bold">DESCRIZIONE:</span>
-                   {{ developer.description }}
+                  {{ developer.description }}
                 </div>
                 <div class="skills"><span class="fw-bold">ABILITA':</span> {{ developer.skills }}</div>
               </div>
@@ -101,7 +103,7 @@ export default {
                 <div class="technologies">
                   <h4>TECNOLOGIE</h4>
                   <ul>
-                    <li v-for="technology,index in developer.technologies" :key="index">
+                    <li v-for="technology, index in developer.technologies" :key="index">
                       {{ technology.name }}
                     </li>
                   </ul>
@@ -117,41 +119,47 @@ export default {
       <p class="fw-bold text-center my-5">
         Sei soddisfatto del mio lavoro? Lasciami una recensione!
       </p>
-      <div class="card text-center">
-        <div class="container-btn">
-          <form @submit.prevent="getPostReview()">
-            <div class="mb-3">
-              <label for="name" class="form-label my-3">Nome</label>
-              <input type="text" required minlength="1" maxlength="50" class="form-control" id="name" v-model="name" />
-            </div>
-            <div class="vote my-3">Voto</div>
-            <div class="container-radio d-flex gap-2">
-              <div class="form-check" v-for="x,index in 5" :key="index">
-                <input required class="form-check-input" name="vote-radio" type="radio" v-model="vote" :value="x"
-                  :id="'flexRadioDefault' + x">
-                <label class="form-check-label" :for="'flexRadioDefault' + x">
-                  {{ x }}
-                </label>
+      <!-- FORM RECENSIONI -->
+      <div class="form_container">
+        <div class="card card_form text-center">
+          <div class="container-btn">
+            <form class="form-review" @submit.prevent="getPostReview()">
+              <div class="mb-3" style="padding: 0 10px;">
+                <label for="name" class="form-label my-3">Nome</label>
+                <input type="text" required minlength="1" maxlength="50" class="form-control" id="name" v-model="name" />
               </div>
-            </div>
-            <div class="mb-3">
-              <label for="comment" class="form-label my-3">Lascia un commento</label>
-              <textarea required minlength="1" maxlength="500" class="form-control" id="comment" rows="3"
-                v-model="comment"></textarea>
-            </div>
-            <button class="btn text-black fw-bold" type="submit">Invia</button>
-          </form>
-          <div v-if="loading">Sto inviando</div>
+              <div class="vote my-3">Voto</div>
+              <div class=" container-radio d-flex gap-2">
+                <div class="form-check" v-for=" x, index in 5" :key="index">
+                  <input required class="form-check-input" name="vote-radio" type="radio" v-model="vote" :value="x"
+                    :id="'flexRadioDefault' + x">
+                  <label class="form-check-label" :for="'flexRadioDefault' + x">
+                    {{ x }}
+                  </label>
+                </div>
+              </div>
+              <div class="mb-3" style="padding: 0 10px;">
+                <label for=" comment" class="form-label my-3">Lascia un commento</label>
+                <textarea required minlength="1" maxlength="500" class="form-control" id="comment" rows="3"
+                  v-model="comment"></textarea>
+              </div>
+              <button class="btn text-black fw-bold my-2" type="submit">Invia</button>
+            </form>
+            <div v-if="loading">Sto inviando</div>
+          </div>
+          <div class="my-3" v-if="!loading && messageSend">
+            Recensione inviata correttamente
+          </div>
         </div>
-        <div class="my-3" v-if="!loading && messageSend">
-        Recensione inviata correttamente
+
+        <h5 class="text-center">Recensioni</h5>
+        <div class="reviews-container" v-if="reviews.length">
+          <ReviewCard v-for="review in reviews" :key="review.id" :review="review" />
+        </div>
+        <div class="text-center" v-else>Non ci sono recensioni al momento</div>
+
       </div>
-      </div>
-      <h5 class="text-center">Recensioni</h5>
-      <div class="reviews-container" v-if="reviews.length">
-        <ReviewCard v-for="review in reviews" :key="review.id" :review="review" />
-      </div>
-      <div class="text-center" v-else>Non ci sono recensioni al momento</div>
+
 
     </div>
   </div>
@@ -189,6 +197,17 @@ export default {
     border-radius: 50%;
     object-fit: cover;
   }
+}
+
+
+
+.form-review {
+  background-color: $light-green;
+}
+
+.card_form {
+  background-color: $bkg-light;
+
 }
 
 .card {
@@ -255,6 +274,11 @@ export default {
     .tecnologie {
       margin-top: unset;
     }
+  }
+
+  .form_container {
+    width: 70%;
+    margin: 0 auto;
   }
 }
 </style>
