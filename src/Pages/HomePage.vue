@@ -1,9 +1,13 @@
 <script>
 import axios from 'axios';
 import { store } from "../store";
+import DeveloperCard from '../components/DeveloperCard.vue';
 
 export default {
     name: "HomePage",
+    components: {
+        DeveloperCard
+    },
     data() {
         return {
             store,
@@ -13,11 +17,13 @@ export default {
                     label: 'fai una ricerca avanzata',
                     routeName: 'searchDev'
                 }
-            ]
+            ],
+            MostVoted:[]
         }
     },
     mounted() {
         this.getTechnology();
+        this.mostVoted()
     },
     methods: {
         getTechnology() {
@@ -28,6 +34,12 @@ export default {
         changePage(techId) {
             // this.$root.$emit('getDeveloper', techId);
             this.$router.push({ name: 'searchDev', params: { id: techId } });
+        },
+        mostVoted(){
+            axios.get(`${this.store.apiUrl}/api/homepage`).then((resp) => {
+                this.MostVoted = resp.data.results;
+                console.log(this.MostVoted);
+            });
         }
     }
 }
@@ -59,8 +71,6 @@ export default {
                     </div>
 
                 </div>
-
-
             </div>
 
 
@@ -95,6 +105,15 @@ export default {
                 </div>
 
                 <img class="dev-img" src="src/assets/image/coding_3242257.png" alt="">
+            </div>
+        </div>
+
+        <div class="most-voted my-3">
+            <h2 class="text-center mt-5">Ecco alcuni degli sviluppatori più votati</h2>
+            <div class="row row-cols-2">
+                <div class="col" v-for="developer in MostVoted" :key="developer.id">
+                    <DeveloperCard :developer="developer" />
+                </div>
             </div>
         </div>
 
