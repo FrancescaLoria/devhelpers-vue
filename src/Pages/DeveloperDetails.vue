@@ -152,12 +152,14 @@ export default {
           </div>
         </div>
 
+        <h5 class="text-center">Recensioni</h5>
+        <div class="reviews-container" v-if="reviews.length">
+          <ReviewCard v-for="review in reviews" :key="review.id" :review="review" />
+        </div>
+        <div class="text-center" v-else>Non ci sono recensioni al momento</div>
+
       </div>
-      <h5 class="text-center">Recensioni</h5>
-      <div class="reviews-container" v-if="reviews.length">
-        <ReviewCard v-for="review in reviews" :key="review.id" :review="review" />
-      </div>
-      <div class="text-center" v-else>Non ci sono recensioni al momento</div>
+
 
     </div>
   </div>
