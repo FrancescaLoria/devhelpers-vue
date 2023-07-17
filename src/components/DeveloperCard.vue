@@ -56,7 +56,7 @@ export default {
                         <div class="container-media text-center ">
                             <!-- SEZIONE MEDIA VOTO E RECENSIONE -->
                             <div class="vote fst-italic fw-bold">MEDIA VOTO : 
-                                <span v-for="vote,id in developer.avg_vote" :key="id">
+                                <span v-for="vote,id in developer.average_vote" :key="id">
                                     <i class="fa-solid fa-star" style="color: rgb(239, 205, 37);"></i>
                                 </span>
                             </div>
