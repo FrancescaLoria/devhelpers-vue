@@ -105,7 +105,7 @@ export default {
 
         <div class="most-voted my-3">
             <h2 class="text-center mt-5">Ecco alcuni degli sviluppatori più votati</h2>
-            <div class="row ">
+            <div class="row row-cols-2">
                 <div class="col" v-for="developer in MostVoted" :key="developer.id">
                     <DeveloperCard :developer="developer" />
                 </div>
