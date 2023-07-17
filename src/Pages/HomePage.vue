@@ -104,7 +104,7 @@ export default {
 
                 </div>
 
-                <img class="dev-img" src="src/assets/image/coding_3242257.png" alt="">
+                <img class="dev-img w-25" src="src/assets/image/coding_3242257.png" alt="">
             </div>
         </div>
 

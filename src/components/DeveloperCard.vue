@@ -64,7 +64,7 @@ export default {
 
             <button type="button" class="btn fw-bold text-dark my-2">
                 <router-link :to="{ name: 'developerDetails', params: { id: developer.id } }"
-                    class=" card-link">DETAILS</router-link>
+                    class=" card-link">DETTAGLI</router-link>
             </button>
         </div>
     </div>
