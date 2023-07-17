@@ -44,19 +44,21 @@ export default {
     // Prendi le tecnologie
     getTechnology() {
       axios.get(`${this.store.apiUrl}/api/technologies`).then((resp) => {
-        // console.log(resp);
+        // //console.log(resp);
         this.technologies = resp.data.results;
       });
     },
     // Prendi i developer
-    getDeveloper(id, pageNum = 1) {
-      if (this.ids.includes(id)) {
-        const index = this.ids.indexOf(id);
-        this.ids.splice(index, 1);
-      } else {
-        this.ids.push(id);
+    getDeveloper(id, pageNum = 1, changeIds = true) {
+      if (changeIds) {
+        if (this.ids.includes(id)) {
+          const index = this.ids.indexOf(id);
+          this.ids.splice(index, 1);
+        } else {
+          this.ids.push(id);
+        }
+        this.idsString = this.ids.join('&');
       }
-      this.idsString = this.ids.join('&');
 
       const params = {
         page: pageNum,
@@ -73,22 +75,22 @@ export default {
 
       //////////PAGINATION//////////
       // axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString, { params }).then((resp) => {
-      //   console.log(resp);
+      //   //console.log(resp);
 
-      //   // console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
-      //   // console.log("Resp.data.results", resp);
+      //   // //console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
+      //   // //console.log("Resp.data.results", resp);
       //   this.developers = (resp.data.results);
       //   this.currentPage = resp.data.results.current_page;
       //   this.lastPage = resp.data.results.last_page;
       //   this.totalDevelopers = resp.data.results.total;
-      //   console.log(this.developers);
+      //   //console.log(this.developers);
 
       this.loading = true
       axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString, { params }).then((resp) => {
-        // console.log(`${this.store.apiUrl}/api/developers/` + this.idsString, { params });
-        // console.log("Resp.data.results", resp);
+        // //console.log(`${this.store.apiUrl}/api/developers/` + this.idsString, { params });
+        console.log("Resp.data.results", resp);
         this.developers = resp.data.results.data;
-
+        //console.log('Response', resp);
         if (store.selectedVote == '' && store.selectedComment == '') {
           this.lastPage = resp.data.results.last_page;
         } else {
@@ -99,9 +101,9 @@ export default {
               this.lastPage = this.lastPage_vote;
             }
           } else if (store.selectedVote != '') {
-            console.log('Array di id tecnologie', this.ids);
+            //console.log('Array di id tecnologie', this.ids);
             if (this.ids == '') {
-              console.log('Last page vote', this.lastPage_vote);
+              //console.log('Last page vote', this.lastPage_vote);
               this.lastPage = this.lastPage_vote;
             } else {
               this.lastPage = resp.data.results.last_page;
@@ -115,45 +117,46 @@ export default {
           const index = this.ids.indexOf('');
           this.ids.splice(index, 1);
         }
-        // console.log('Ids array', this.ids);
-        // console.log("Ids String", this.idsString);
-        // console.log("Page number", this.pageNumber);
-        // console.log("Current page", this.currentPage);
-        // console.log("Last page", this.lastPage);
-        // console.log("Last page vote", this.lastPage_vote);
+        // //console.log('Ids array', this.ids);
+        // //console.log("Ids String", this.idsString);
+        // //console.log("Page number", this.pageNumber);
+        // //console.log("Current page", this.currentPage);
+        // //console.log("Last page", this.lastPage);
+        // //console.log("Last page vote", this.lastPage_vote);
 
-        // console.log(this.developersByComment);
-        // console.log(this.developersByVote);
-        // console.log("developers per tecnologia", this.developers);
+        // //console.log(this.developersByComment);
+        // //console.log(this.developersByVote);
+        // //console.log("developers per tecnologia", this.developers);
       }).finally(() => {
         this.loading = false
       })
     },
     // Filtra per voti
     getFilterVote(vote) {
-      console.log("Voto", vote);
+      //console.log("Voto", vote);
       if (vote != '') {
         axios.get(`${this.store.apiUrl}/api/reviews/` + vote)
           .then((resp) => {
-            console.log(resp);
+            //console.log(resp);
             this.developersByVote = resp.data.results.data;
-            this.lastPage_vote = resp.data.results.last_page;
-            console.log('Last page', resp.data.results.last_page);
-            console.log("By vote", this.developersByVote);
+            this.lastPage = resp.data.results.last_page;
+            //console.log('Last page', resp.data.results.last_page);
+            //console.log("By vote", this.developersByVote);
           })
       } else {
-        this.developersByVote = this.developers;
+        this.developersByVote = [];
+        this.getDeveloper('', 1, false);
       }
     },
     getFilterComment(comment) {
-      console.log("Commento", comment);
+      //console.log("Commento", comment);
       if (comment != '') {
         axios.get(`${this.store.apiUrl}/api/review/` + comment)
           .then((resp) => {
-            console.log(resp);
+            //console.log(resp);
             this.developersByComment = resp.data.results.data;
             this.lastPage_comments = resp.data.results.last_page;
-            console.log("By comment", this.developersByComment);
+            //console.log("By comment", this.developersByComment);
           })
       } else {
         this.developersByComment = this.developers;
@@ -165,8 +168,16 @@ export default {
     filteredDevelopers() {
       let filteredDevelopers = [];
       // Entrambi i filtri attivi
+      console.log('Developeres', this.developers);
+      console.log('Developer by vote', this.developersByVote);
+      console.log('Developer by comment', this.developersByComment);
+      console.log('Store vote', store.selectedVote);
+      console.log('Store comment', store.selectedComment);
+
+
       if (this.developersByVote != '' && this.developersByComment != '') {
         if (this.idsString == '' && store.selectedVote == '' && store.selectedComment == '') {
+          //console.log('Entrato 1');
           filteredDevelopers = this.developers;
         } else {
           let tempDev = [];
@@ -190,7 +201,7 @@ export default {
 
         // Entrambi i filtri NON attivi
       } else if (this.developersByVote == '' && this.developersByComment == '') {
-        // console.log("è tutto vuoto");
+        //console.log("è tutto vuoto");
         filteredDevelopers = this.developers;
         // Filtro per recensioni attivo
       } else if (this.developersByComment != '') {
