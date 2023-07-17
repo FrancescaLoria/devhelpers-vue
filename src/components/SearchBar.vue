@@ -12,7 +12,7 @@ export default {
     DeveloperCard,
     Filters,
     filterComment,
-    
+
   },
   data() {
     return {
@@ -28,6 +28,8 @@ export default {
       pageNumber: 1,
       currentPage: 1,
       lastPage: null,
+      lastPage_vote: null,
+      lastPage_comments: null,
       totalDevelopers: 0,
 
     };
@@ -35,22 +37,19 @@ export default {
   mounted() {
 
     this.getTechnology();
-    if (this.$route.params.id)
-    this.getDeveloper();
-    
+    this.getDeveloper(parseInt(this.$route.params.id));
+
   },
   methods: {
     // Prendi le tecnologie
     getTechnology() {
       axios.get(`${this.store.apiUrl}/api/technologies`).then((resp) => {
-        console.log(resp);
+        // console.log(resp);
         this.technologies = resp.data.results;
       });
     },
     // Prendi i developer
-    getDeveloper(id,page) {
-      let params ;
-     
+    getDeveloper(id, pageNum = 1) {
       if (this.ids.includes(id)) {
         const index = this.ids.indexOf(id);
         this.ids.splice(index, 1);
@@ -59,19 +58,23 @@ export default {
       }
       this.idsString = this.ids.join('&');
 
-      if (page != 0) {
-        params = {
-          page : page,
-     
-          // idsString
-        }
-      }
-      
+      const params = {
+        page: pageNum,
+      };
 
-     //////////PAGINATION//////////
+      // if (pageNum != 0) {
+      //   params = {
+
+
+      //     // idsString
+      //   }
+      // }
+
+
+      //////////PAGINATION//////////
       // axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString, { params }).then((resp) => {
       //   console.log(resp);
-    
+
       //   // console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
       //   // console.log("Resp.data.results", resp);
       //   this.developers = (resp.data.results);
@@ -81,16 +84,47 @@ export default {
       //   console.log(this.developers);
 
       this.loading = true
-      axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString, {params}).then((resp) => {
-        console.log(`${this.store.apiUrl}/api/developers/` + this.idsString);
+      axios.get(`${this.store.apiUrl}/api/developers/` + this.idsString, { params }).then((resp) => {
+        // console.log(`${this.store.apiUrl}/api/developers/` + this.idsString, { params });
         // console.log("Resp.data.results", resp);
-        this.developers = (resp.data.results);
-        
-        this.lastPage = resp.data.results.last_page
+        this.developers = resp.data.results.data;
+
+        if (store.selectedVote == '' && store.selectedComment == '') {
+          this.lastPage = resp.data.results.last_page;
+        } else {
+          if (store.selectedVote != '' && store.selectedComment != '') {
+            if (this.lastPage_vote < this.lastPage_comments) {
+              this.lastPage = this.lastPage_comments;
+            } else {
+              this.lastPage = this.lastPage_vote;
+            }
+          } else if (store.selectedVote != '') {
+            console.log('Array di id tecnologie', this.ids);
+            if (this.ids == '') {
+              console.log('Last page vote', this.lastPage_vote);
+              this.lastPage = this.lastPage_vote;
+            } else {
+              this.lastPage = resp.data.results.last_page;
+            }
+          } else if (store.selectedComment != '') {
+            this.lastPage = this.lastPage_comments;
+          }
+        }
         this.currentPage = resp.data.results.current_page;
-        console.log(this.developersByComment);
-        console.log(this.developersByVote);
-        console.log("developers per tecnologia", this.developers);
+        if (this.ids.includes('')) {
+          const index = this.ids.indexOf('');
+          this.ids.splice(index, 1);
+        }
+        // console.log('Ids array', this.ids);
+        // console.log("Ids String", this.idsString);
+        // console.log("Page number", this.pageNumber);
+        // console.log("Current page", this.currentPage);
+        // console.log("Last page", this.lastPage);
+        // console.log("Last page vote", this.lastPage_vote);
+
+        // console.log(this.developersByComment);
+        // console.log(this.developersByVote);
+        // console.log("developers per tecnologia", this.developers);
       }).finally(() => {
         this.loading = false
       })
@@ -98,11 +132,13 @@ export default {
     // Filtra per voti
     getFilterVote(vote) {
       console.log("Voto", vote);
-      // Non funziona bene
       if (vote != '') {
         axios.get(`${this.store.apiUrl}/api/reviews/` + vote)
           .then((resp) => {
-            this.developersByVote = resp.data.results;
+            console.log(resp);
+            this.developersByVote = resp.data.results.data;
+            this.lastPage_vote = resp.data.results.last_page;
+            console.log('Last page', resp.data.results.last_page);
             console.log("By vote", this.developersByVote);
           })
       } else {
@@ -111,11 +147,12 @@ export default {
     },
     getFilterComment(comment) {
       console.log("Commento", comment);
-      // Non funziona bene
       if (comment != '') {
         axios.get(`${this.store.apiUrl}/api/review/` + comment)
           .then((resp) => {
-            this.developersByComment = resp.data.results;
+            console.log(resp);
+            this.developersByComment = resp.data.results.data;
+            this.lastPage_comments = resp.data.results.last_page;
             console.log("By comment", this.developersByComment);
           })
       } else {
@@ -242,7 +279,7 @@ export default {
           <!-- <div v-if="developersByVote === ''" class="col" v-for="developer in developers" :key="developer.id">
             <DeveloperCard :developer="developer" />
           </div> -->
-          <div class="col" v-for="developer,index in filteredDevelopers" :key="index">
+          <div class="col" v-for="developer, index in filteredDevelopers" :key="index">
             <DeveloperCard :developer="developer" />
           </div>
         </div>
@@ -251,20 +288,21 @@ export default {
         <p class="text-center">non ci sono programmatori relativi a questa ricerca</p>
       </div>
     </div>
+    <!-- pagination -->
+    <nav v-if="lastPage" class="d-flex justify-content-center my-3" aria-label="Page navigation">
+      <ul class="pagination">
+        <li class="page-item" :class="{ 'disabled': currentPage === 1 }"><a
+            @click.prevent="getDeveloper('', currentPage - 1)" class="page-link" href="#">Previous</a></li>
+        <li v-for="devNumber in lastPage" @click.prevent="getDeveloper('', devNumber)"
+          :class="{ 'active': devNumber === currentPage }" class="page-item"><a class="page-link" href="#">{{ devNumber
+          }}</a></li>
+        <li class="page-item" :class="{ 'disabled': currentPage === lastPage }"><a
+            @click.prevent="getDeveloper('', currentPage + 1)" class="page-link" href="#">Next</a></li>
+      </ul>
+    </nav>
   </div>
 
-  <!-- pagination -->
-  <nav v-if="lastPage" class="d-flex justify-content-center my-3" aria-label="Page navigation">
-            <ul class="pagination">
-                <li class="page-item" :class="{ 'disabled': currentPage === 1 }"><a
-                        @click.prevent="getDevelopers('',currentPage - 1)" class="page-link" href="#">Previous</a></li>
-                <li v-for="DevNumber in lastPage" @click.prevent="getDevelopers('',DevNumber)"
-                    :class="{ 'active': DevNumber === currentPage }" class="page-item"><a class="page-link" href="#"></a></li>
-                <li class="page-item" :class="{ 'disabled': currentPage === lastPage }"><a
-                        @click.prevent="getDevelopers('',currentPage + 1)" class="page-link" href="#">Next</a></li>
-            </ul>
-        </nav>
-  
+
   <!-- <Pagination :currentPage="currentPage" :lastPage="lastPage" @changePage="getDevelopers" /> -->
 </template>
 
